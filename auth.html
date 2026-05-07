@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acceso</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 480px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .hidden {
+      display: none;
+    }
+    #message {
+      color: #b00020;
+      min-height: 20px;
+    }
+    #okMessage {
+      color: #0a7a2f;
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Acceso corporativo</h1>
+
+  <div class="card">
+    <p>Ingresa tu correo corporativo para recibir un enlace de acceso.</p>
+    <input id="email" type="email" placeholder="nombre@empresa.com" />
+    <button id="sendLinkBtn">Enviar enlace</button>
+
+    <p id="message"></p>
+    <p id="okMessage"></p>
+  </div>
+
+  <script type="module" src="./auth.js"></script>
+</body>
+</html>
