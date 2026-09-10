@@ -1,0 +1,518 @@
+{
+  "$schema": "../schema/component.schema.json",
+
+  "identity": {
+    "id": "card/medium",
+    "name": "Card Medium",
+    "figmaKey": "card/medium",
+    "category": "cards",
+    "status": "stable",
+    "version": "1.0.0",
+    "since": "1.0.0",
+    "owner": "Design Systems Guild",
+    "lastReview": "2026-09-09",
+    "platforms": ["web", "ios", "android", "figma"],
+    "m3Equivalent": "Card (elevated | filled | outlined)"
+  },
+
+  "purpose": {
+    "summary": "Superficie autocontenida que presenta el preview de un único sujeto y actúa como punto de entrada a su detalle.",
+    "description": "Card Medium es el tier estándar de la familia Card. Agrupa media, texto jerarquizado y acciones sobre una superficie con límite visual propio, de forma que el usuario pueda escanear varios sujetos en paralelo (grid, lista vertical o carrusel) y profundizar en uno. Es el único componente de la familia que soporta simultáneamente media, subhead y área de acciones.",
+    "whenToUse": [
+      "El contenido trata sobre un único sujeto y tiene ≥2 niveles de jerarquía (p. ej. título + soporte).",
+      "Varios sujetos comparables se muestran juntos y el usuario debe compararlos antes de elegir.",
+      "La superficie completa navega a una vista de detalle.",
+      "Se necesita media (imagen, thumbnail o ilustración) junto al texto."
+    ],
+    "whenNotToUse": [
+      { "case": "El contenido es una sola línea de texto sin media ni acciones.", "useInstead": "item-list" },
+      { "case": "Solo se muestra una métrica o un atajo compacto.", "useInstead": "card/small" },
+      { "case": "El contenido es un mensaje del sistema que interrumpe la tarea.", "useInstead": "banner" },
+      { "case": "El contenido necesita múltiples secciones separadas por divisores y más de dos acciones.", "useInstead": "card-complex" },
+      { "case": "El sujeto es un importe financiero con formato monetario.", "useInstead": "card/amount" }
+    ]
+  },
+
+  "anatomy": {
+    "diagram": "assets/anatomy/card-medium.svg",
+    "layout": {
+      "direction": "vertical",
+      "align": "stretch",
+      "justify": "start",
+      "wrap": false,
+      "gap": "--spacing3"
+    },
+    "parts": [
+      {
+        "index": 1,
+        "id": "container",
+        "name": "Container",
+        "required": true,
+        "role": "container",
+        "cardinality": "1",
+        "description": "Superficie que agrupa todas las partes y expresa la elevación, el radio y el límite visual. Es la única parte obligatoria; el tamaño lo determina el contenido.",
+        "contains": ["media", "content", "actions"],
+        "style": {
+          "background": "--surface-container-low",
+          "radius": "--radius-medium",
+          "elevation": "--elevation-1",
+          "paddingBlock": "--spacing4",
+          "paddingInline": "--spacing4",
+          "gap": "--spacing3",
+          "minHeight": "auto"
+        }
+      },
+      {
+        "index": 2,
+        "id": "media",
+        "name": "Media",
+        "required": false,
+        "role": "media",
+        "cardinality": "0..1",
+        "description": "Imagen, ilustración, thumbnail o vídeo. Ocupa el ancho completo del container (sangrado a los bordes) o se ancla como thumbnail al inicio del bloque de contenido.",
+        "style": {
+          "radius": "--radius-small",
+          "aspectRatio": "16 / 9",
+          "width": "100%",
+          "background": "--surface-container"
+        }
+      },
+      {
+        "index": 3,
+        "id": "content",
+        "name": "Content block",
+        "required": false,
+        "role": "region",
+        "cardinality": "0..1",
+        "description": "Agrupa headline, subhead y supporting text en una pila vertical con espaciado propio.",
+        "contains": ["headline", "subhead", "supporting-text"],
+        "style": { "gap": "--spacing1" }
+      },
+      {
+        "index": 4,
+        "id": "headline",
+        "name": "Headline",
+        "required": false,
+        "role": "text",
+        "cardinality": "0..1",
+        "description": "Identifica el sujeto de la card. Es el ancla del nombre accesible cuando la card es navegable.",
+        "style": { "typography": "title/medium", "foreground": "--on-surface", "maxLines": 2, "textAlign": "start" }
+      },
+      {
+        "index": 5,
+        "id": "subhead",
+        "name": "Subhead",
+        "required": false,
+        "role": "text",
+        "cardinality": "0..1",
+        "description": "Metadato de segundo nivel: categoría, autor, fecha o ubicación. Nunca repite el headline.",
+        "style": { "typography": "label/medium", "foreground": "--on-surface-low", "maxLines": 1, "textAlign": "start" }
+      },
+      {
+        "index": 6,
+        "id": "supporting-text",
+        "name": "Supporting text",
+        "required": false,
+        "role": "text",
+        "cardinality": "0..1",
+        "description": "Una capa de detalle adicional, no la descripción completa. El destino carga el resto.",
+        "style": { "typography": "body/medium", "foreground": "--on-surface-variant", "maxLines": 3, "textAlign": "start" }
+      },
+      {
+        "index": 7,
+        "id": "actions",
+        "name": "Action area",
+        "required": false,
+        "role": "action",
+        "cardinality": "0..1",
+        "description": "Fila de acciones explícitas alineada al final. Máximo 2 acciones; si se necesitan más, van a overflow.",
+        "style": { "gap": "--spacing2", "justify": "end", "paddingBlock": "--spacing2" }
+      },
+      {
+        "index": 8,
+        "id": "state-layer",
+        "name": "State layer",
+        "required": false,
+        "role": "decoration",
+        "cardinality": "0..1",
+        "description": "Capa de color sobre el container que expresa hover, focus y pressed. Solo existe si la card es interactiva.",
+        "style": { "background": "--on-surface", "opacity": 0, "radius": "--radius-medium" }
+      }
+    ]
+  },
+
+  "variants": {
+    "axes": [
+      { "id": "type", "label": "Emphasis / type", "values": ["elevated", "filled", "outlined"], "default": "elevated" },
+      { "id": "media", "label": "Media placement", "values": ["none", "top", "leading"], "default": "top" },
+      { "id": "interactive", "label": "Interactive", "values": ["static", "navigable"], "default": "navigable" },
+      { "id": "actions", "label": "Actions", "values": ["none", "single", "dual", "overflow"], "default": "none" }
+    ],
+    "named": [
+      {
+        "id": "elevated",
+        "name": "Elevated",
+        "description": "Sombra de reposo que separa la card del fondo. Uso por defecto sobre superficies planas y en colecciones donde las cards deben leerse como objetos independientes.",
+        "emphasis": "medium",
+        "overrides": {
+          "container": { "background": "--surface-container-low", "elevation": "--elevation-1", "border": "none" }
+        }
+      },
+      {
+        "id": "filled",
+        "name": "Filled",
+        "description": "Separación por contraste de superficie, sin sombra. Menor énfasis. Uso dentro de contenedores que ya tienen elevación propia (sheets, modales) para evitar apilar sombras.",
+        "emphasis": "low",
+        "overrides": {
+          "container": { "background": "--surface-container", "elevation": "none", "border": "none" }
+        }
+      },
+      {
+        "id": "outlined",
+        "name": "Outlined",
+        "description": "Límite explícito por trazo. Mayor énfasis del contorno y máxima definición sobre fondos con textura o imagen. Es la variante accesible por defecto en modo alto contraste.",
+        "emphasis": "high",
+        "overrides": {
+          "container": { "background": "--surface", "elevation": "none", "border": "--outline-high", "borderWidth": "1px" }
+        }
+      }
+    ],
+    "variantCount": 72
+  },
+
+  "specs": {
+    "base": {
+      "container": {
+        "background": "--surface-container-low",
+        "foreground": "--on-surface",
+        "radius": "--radius-medium",
+        "elevation": "--elevation-1",
+        "paddingBlock": "--spacing4",
+        "paddingInline": "--spacing4",
+        "gap": "--spacing3",
+        "maxWidth": "none"
+      },
+      "media": { "radius": "--radius-small", "aspectRatio": "16 / 9", "background": "--surface-container" },
+      "content": { "gap": "--spacing1" },
+      "headline": { "typography": "title/medium", "foreground": "--on-surface", "maxLines": 2 },
+      "subhead": { "typography": "label/medium", "foreground": "--on-surface-low", "maxLines": 1 },
+      "supporting-text": { "typography": "body/medium", "foreground": "--on-surface-variant", "maxLines": 3 },
+      "actions": { "gap": "--spacing2", "paddingBlock": "--spacing2" },
+      "state-layer": { "background": "--on-surface", "opacity": 0 }
+    },
+    "sizes": [
+      {
+        "id": "compact",
+        "label": "Compact",
+        "overrides": {
+          "container": { "paddingBlock": "--spacing3", "paddingInline": "--spacing3", "gap": "--spacing2" },
+          "headline": { "typography": "title/small" },
+          "supporting-text": { "typography": "body/small", "maxLines": 2 }
+        }
+      },
+      {
+        "id": "standard",
+        "label": "Standard",
+        "overrides": {}
+      }
+    ],
+    "measurements": {
+      "radius": "--radius-medium",
+      "padding": { "block": "--spacing4", "inline": "--spacing4" },
+      "gap": "--spacing3",
+      "itemSpacing": "--spacing2",
+      "minTouchTarget": "44x44dp",
+      "alignment": "start",
+      "resolved": {
+        "radius": "12px",
+        "paddingBlock": "16px",
+        "paddingInline": "16px",
+        "internalGap": "12px",
+        "contentGap": "4px",
+        "itemSpacing": "8px",
+        "mediaRadius": "8px",
+        "minWidth": "160px",
+        "recommendedMaxWidth": "480px"
+      }
+    },
+    "typography": [
+      { "part": "headline", "token": "title/medium", "maxLines": 2 },
+      { "part": "subhead", "token": "label/medium", "maxLines": 1 },
+      { "part": "supporting-text", "token": "body/medium", "maxLines": 3 }
+    ]
+  },
+
+  "states": {
+    "interactive": true,
+    "interactionModel": "activatable",
+    "default": "default",
+    "list": [
+      {
+        "id": "default",
+        "trigger": "Estado de reposo.",
+        "delta": {}
+      },
+      {
+        "id": "hover",
+        "trigger": "Puntero sobre el container. Solo en dispositivos con hover.",
+        "delta": {
+          "state-layer": { "background": "--on-surface", "opacity": 0.08 },
+          "container": { "elevation": "--elevation-2" }
+        },
+        "notes": "En variantes filled y outlined la elevación NO cambia; solo se aplica el state layer."
+      },
+      {
+        "id": "focus-visible",
+        "trigger": "El container recibe foco por teclado.",
+        "delta": {
+          "state-layer": { "background": "--on-surface", "opacity": 0.1 },
+          "container": { "outline": "--nodo-primary-light", "outlineWidth": "2px", "outlineOffset": "2px" }
+        },
+        "announcement": "Se anuncia el nombre accesible seguido del rol."
+      },
+      {
+        "id": "pressed",
+        "trigger": "Pointer down o Enter/Space mantenidos sobre el container.",
+        "delta": {
+          "state-layer": { "background": "--on-surface", "opacity": 0.1 },
+          "container": { "elevation": "--elevation-1", "transform": "scale(0.995)" }
+        }
+      },
+      {
+        "id": "selected",
+        "trigger": "La card forma parte de un grupo de selección y está elegida.",
+        "delta": {
+          "container": { "background": "--primary-container", "border": "--primary", "borderWidth": "1.5px" },
+          "headline": { "foreground": "--on-primary-container" }
+        },
+        "announcement": "aria-selected=\"true\" — el lector anuncia «seleccionado»."
+      },
+      {
+        "id": "dragged",
+        "trigger": "La card se levanta para reordenar dentro de una colección.",
+        "delta": {
+          "state-layer": { "background": "--on-surface", "opacity": 0.16 },
+          "container": { "elevation": "--elevation-3" }
+        },
+        "notes": "La card levantada se dibuja por encima de todo excepto app bars y navegación."
+      },
+      {
+        "id": "disabled",
+        "trigger": "La card existe pero no es accionable.",
+        "delta": {
+          "container": { "opacity": 0.12, "elevation": "none" },
+          "headline": { "opacity": 0.38 },
+          "supporting-text": { "opacity": 0.38 },
+          "actions": { "opacity": 0.38 }
+        },
+        "announcement": "aria-disabled=\"true\". El motivo del bloqueo se expone en texto adyacente, nunca solo por color.",
+        "notes": "Contenedor al 12% y contenido al 38%, alineado con la convención de Material Design 3."
+      },
+      {
+        "id": "loading",
+        "trigger": "El contenido de la card aún no está disponible.",
+        "delta": {
+          "media": { "background": "--surface-container" },
+          "headline": { "background": "--surface-container", "foreground": "transparent" },
+          "supporting-text": { "background": "--surface-container", "foreground": "transparent" }
+        },
+        "announcement": "aria-busy=\"true\" en el container.",
+        "notes": "Skeleton que conserva la geometría final para evitar layout shift."
+      }
+    ]
+  },
+
+  "behavior": {
+    "interactions": [
+      {
+        "id": "navigate",
+        "trigger": "tap / click / Enter sobre el container navegable",
+        "result": "Navega a la vista de detalle del sujeto.",
+        "motion": {
+          "pattern": "container-transform",
+          "duration": "400ms",
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "properties": ["transform", "opacity", "border-radius"]
+        }
+      },
+      {
+        "id": "hover-lift",
+        "trigger": "pointerenter",
+        "result": "La card sube un nivel de elevación y aparece el state layer.",
+        "motion": { "pattern": "none", "duration": "150ms", "easing": "cubic-bezier(0.4, 0, 0.2, 1)", "properties": ["box-shadow", "background-color"] }
+      },
+      {
+        "id": "press",
+        "trigger": "pointerdown",
+        "result": "La card se hunde ligeramente y refuerza el state layer.",
+        "motion": { "pattern": "none", "duration": "100ms", "easing": "cubic-bezier(0.4, 0, 1, 1)", "properties": ["transform", "box-shadow"] }
+      },
+      {
+        "id": "enter-collection",
+        "trigger": "La card aparece dentro de una colección",
+        "result": "Fade + desplazamiento vertical de 8px, con stagger de 40ms entre instancias.",
+        "motion": { "pattern": "fade-through", "duration": "250ms", "easing": "cubic-bezier(0, 0, 0.2, 1)", "properties": ["opacity", "transform"] }
+      }
+    ],
+    "gestures": [
+      { "gesture": "swipe", "action": "Descarta o cambia el estado de la card (archivar, marcar).", "constraint": "Máximo UNA acción de swipe por card. La card no puede contener contenido deslizable propio (carrusel, paginación)." },
+      { "gesture": "long-press + drag", "action": "Levanta la card para reordenarla en la colección.", "constraint": "Al levantarse sube a elevation-3; no empuja a otros elementos fuera del layout." }
+    ],
+    "overflow": {
+      "strategy": "truncate",
+      "affordance": "Truncado con elipsis en el límite de maxLines. Si hay más contenido, se revela expandiendo la card, nunca con scroll interno en móvil."
+    },
+    "reducedMotion": "Con prefers-reduced-motion: reduce se eliminan transform y container-transform; los cambios de estado se resuelven con un cross-fade de opacidad de 100ms.",
+    "loading": "Skeleton que preserva la geometría final (media con su aspect-ratio, líneas de texto con su altura de línea) para no provocar layout shift.",
+    "emptyState": "Una card no se renderiza vacía. Si no hay sujeto, la colección muestra empty-error-state en lugar de cards placeholder."
+  },
+
+  "composition": {
+    "slots": [
+      { "id": "media", "name": "Media", "accepts": ["image", "video", "component"], "allowedComponents": ["avatar", "spot-country", "qr"], "cardinality": "0..1", "required": false, "defaultPart": "media", "constraints": "Ratio fijo por variante. Nunca colocar texto sobre la media sin scrim o bounding shape." },
+      { "id": "headline", "name": "Headline", "accepts": ["text"], "cardinality": "0..1", "required": false, "defaultPart": "headline", "constraints": "Texto plano. Sin enlaces ni formato enriquecido." },
+      { "id": "subhead", "name": "Subhead", "accepts": ["text", "component"], "allowedComponents": ["badge", "status-indicator", "label-percentage"], "cardinality": "0..1", "required": false, "defaultPart": "subhead" },
+      { "id": "supporting", "name": "Supporting text", "accepts": ["text"], "cardinality": "0..1", "required": false, "defaultPart": "supporting-text" },
+      { "id": "actions", "name": "Actions", "accepts": ["component"], "allowedComponents": ["button", "chip", "close", "expand", "menu"], "cardinality": "0..2", "required": false, "defaultPart": "actions", "constraints": "Máximo 2 acciones visibles. Un solo botón filled por card." },
+      { "id": "overlay", "name": "Overlay indicator", "accepts": ["component"], "allowedComponents": ["badge", "badge_number_dot", "badge-discount"], "cardinality": "0..1", "required": false, "constraints": "Anclado a la esquina superior derecha del container, offset --spacing2." }
+    ],
+    "props": [
+      { "name": "type", "type": "enum", "enum": ["elevated", "filled", "outlined"], "default": "elevated", "description": "Variante de énfasis." },
+      { "name": "size", "type": "enum", "enum": ["compact", "standard"], "default": "standard", "description": "Tier de densidad." },
+      { "name": "mediaPlacement", "type": "enum", "enum": ["none", "top", "leading"], "default": "top", "description": "Posición de la media respecto del bloque de contenido." },
+      { "name": "interactive", "type": "boolean", "default": true, "description": "Si toda la superficie es un destino navegable." },
+      { "name": "href", "type": "string", "default": null, "description": "Destino cuando interactive=true. Convierte el container en un elemento <a>." },
+      { "name": "selected", "type": "boolean", "default": false, "description": "Estado de selección en grupos de elección." },
+      { "name": "disabled", "type": "boolean", "default": false },
+      { "name": "loading", "type": "boolean", "default": false }
+    ],
+    "events": [
+      { "name": "activate", "payload": "{ id }", "description": "Se dispara al tocar la card navegable con puntero o teclado." },
+      { "name": "select", "payload": "{ id, selected }", "description": "Solo cuando la card pertenece a un grupo de selección." },
+      { "name": "dismiss", "payload": "{ id, direction }", "description": "Se dispara al completar el gesto de swipe." }
+    ],
+    "nestingRules": [
+      "Nunca anidar una card dentro de otra card.",
+      "Una card navegable no puede contener otros elementos interactivos: o la superficie es el destino, o las acciones son los tab stops, nunca ambos.",
+      "No colocar bars, templates ni superficies de navegación dentro de una card.",
+      "Las cards de una misma colección comparten elevación de reposo; no mezclar variantes dentro de la misma colección."
+    ]
+  },
+
+  "responsive": {
+    "fluid": true,
+    "breakpoints": [
+      { "id": "compact", "minWidth": "0px", "columns": 1, "behavior": "La card ocupa el ancho completo del contenido menos los márgenes de pantalla. Media en `top`. En listas muy densas, considerar sustituir la card por item-list." },
+      { "id": "medium", "minWidth": "600px", "columns": 2, "behavior": "Grid de 2 columnas con itemSpacing --spacing2. La media puede pasar a `leading` en layouts horizontales." },
+      { "id": "expanded", "minWidth": "840px", "columns": 3, "behavior": "Grid de 3 columnas. Se aumenta el padding a --spacing6 y el headline sube a title/large." },
+      { "id": "large", "minWidth": "1200px", "columns": 4, "behavior": "Grid de 4 columnas con maxWidth 480px por card para que la media no se distorsione." }
+    ]
+  },
+
+  "guidelines": {
+    "do": [
+      { "rule": "Mantén una jerarquía única y plana: una media, un headline, un subhead opcional, un texto de soporte y como máximo dos acciones.", "rationale": "La card se escanea en paralelo con sus vecinas; más de un nivel de decisión rompe la comparación.", "example": "Imagen del producto + nombre + precio + botón «Añadir»." },
+      { "rule": "Haz que toda la superficie sea el destino cuando la card representa un único sujeto navegable.", "rationale": "Aumenta el área táctil y elimina la ambigüedad sobre qué es clicable.", "example": "Card de artículo cuyo container completo abre el detalle." },
+      { "rule": "Usa la misma variante y el mismo tier de tamaño en todas las cards de una colección.", "rationale": "Las cards coplanares comparten elevación de reposo; mezclar variantes rompe la lectura de grupo." },
+      { "rule": "Trunca el contenido con elipsis en el límite de maxLines y ofrece el detalle en el destino.", "rationale": "Una card no debe crecer de forma impredecible dentro de un grid." },
+      { "rule": "Ancla siempre el nombre accesible al headline.", "rationale": "Sin headline la card navegable no tiene nombre y el lector anuncia solo «enlace»." }
+    ],
+    "dont": [
+      { "rule": "No uses una card para una sola línea de texto sin media ni acciones.", "rationale": "El contenedor añade peso visual sin aportar jerarquía.", "example": "En su lugar, usa item-list." },
+      { "rule": "No anides cards ni pongas scroll interno en móvil.", "rationale": "Genera dos barras de scroll y rompe el gesto de la colección." },
+      { "rule": "No coloques más de un botón de máximo énfasis dentro de la card.", "rationale": "La card ya es un objetivo de acción; dos acciones primarias compiten con la superficie." },
+      { "rule": "No pongas texto directamente sobre la media sin scrim o bounding shape.", "rationale": "El contraste depende de la imagen y no se puede garantizar." },
+      { "rule": "No fuerces contenido dentro de cards cuando espaciado, encabezados o divisores producirían una jerarquía más simple.", "rationale": "La card es un contenedor con coste visual; no es el layout por defecto." },
+      { "rule": "No conviertas la card en interactiva y además llenes su interior de controles enfocables.", "rationale": "Duplica los tab stops y hace imposible predecir qué activa Enter." }
+    ],
+    "content": {
+      "rules": [
+        "El headline nombra el sujeto de forma específica; no describe la acción.",
+        "El subhead aporta un metadato, no una repetición del headline.",
+        "El texto de soporte añade exactamente una capa de detalle; el destino carga el resto.",
+        "Las etiquetas de acción son verbos imperativos que nombran el resultado.",
+        "El texto empieza alineado al inicio (start-aligned), nunca centrado."
+      ],
+      "goodExample": "Headline: «Transferencia a Ana Ruiz» · Subhead: «Hoy, 14:32» · Supporting: «Enviada desde tu cuenta principal» · Acción: «Ver recibo»",
+      "badExample": "Headline: «Información» · Subhead: «Información» · Supporting: «Aquí puedes ver toda la información relacionada con esta operación y también otras operaciones relacionadas…» · Acción: «OK»",
+      "maxLengths": { "headline": 60, "subhead": 40, "supportingText": 140, "actionLabel": 20 },
+      "localization": "Prever un 35% de expansión respecto del castellano. El headline puede ocupar 2 líneas; el subhead trunca en 1. Nunca truncar la etiqueta de una acción: reducir el número de acciones antes que el texto."
+    },
+    "placement": [
+      "Grid: mínimo 2 columnas, itemSpacing --spacing2, cards coplanares.",
+      "Lista vertical: ancho completo, separación --spacing2, sin divisores entre cards.",
+      "Carrusel: ancho fijo por card con peek del 12% de la siguiente para señalar el scroll.",
+      "Los controles de filtrado y ordenación van FUERA de la colección, nunca dentro de una card."
+    ],
+    "density": "El tier `compact` se usa cuando hay más de 6 cards visibles simultáneamente o en breakpoint compact con grid de 2 columnas."
+  },
+
+  "accessibility": {
+    "role": "article",
+    "roleRationale": "Una card estática es contenido autocontenido: `article` con nombre accesible desde el headline. Si la card completa es un destino, el container pasa a ser un `<a>` (rol link) o `<button>`; nunca se anidan controles enfocables dentro de un container enfocable.",
+    "accessibleName": "Deriva del headline mediante aria-labelledby apuntando al id del headline. Si no hay headline, se requiere aria-label explícito.",
+    "ariaAttributes": [
+      { "attribute": "aria-labelledby", "value": "id del headline", "when": "siempre que exista headline" },
+      { "attribute": "aria-describedby", "value": "id del supporting-text", "when": "cuando el texto de soporte es necesario para decidir" },
+      { "attribute": "aria-selected", "value": "true | false", "when": "la card pertenece a un grupo de selección" },
+      { "attribute": "aria-disabled", "value": "true", "when": "state = disabled" },
+      { "attribute": "aria-busy", "value": "true", "when": "state = loading" },
+      { "attribute": "aria-roledescription", "value": "tarjeta", "when": "opcional, solo si aporta claridad en el contexto de la colección" }
+    ],
+    "keyboard": [
+      { "key": "Tab", "action": "Entra en la card. Si es navegable genera UN solo tab stop; si es estática con acciones, cada acción es su propio tab stop en orden visual." },
+      { "key": "Shift + Tab", "action": "Sale de la card hacia el elemento anterior." },
+      { "key": "Enter", "action": "Activa la card navegable o la acción enfocada." },
+      { "key": "Space", "action": "Activa la card cuando su rol es button; alterna la selección en grupos de elección." },
+      { "key": "Arrow Up / Down / Left / Right", "action": "Mueve entre cards dentro de una colección con roving tabindex, siguiendo el orden visual del grid." },
+      { "key": "Escape", "action": "Cancela un arrastre en curso y devuelve la card a su posición original." }
+    ],
+    "tabStops": "Card navegable: 1 tab stop (el container). Card estática con acciones: 0 para el container + 1 por acción. Nunca ambas cosas a la vez.",
+    "focus": {
+      "indicator": "--nodo-primary-light",
+      "width": "2px",
+      "offset": "2px",
+      "trapped": false,
+      "restoreTo": "Al volver desde la vista de detalle, el foco se restaura sobre la card que originó la navegación."
+    },
+    "screenReader": [
+      "El orden de lectura es: nombre accesible (headline) → subhead → supporting text → acciones.",
+      "La media decorativa lleva alt=\"\"; la media informativa describe el sujeto, no repite el headline.",
+      "Los cambios de estado significativos (selección, carga completada) se anuncian por live region o por actualización del nombre/valor accesible, nunca por color o animación.",
+      "En una colección, el container de la colección expone el total de elementos (aria-setsize / aria-posinset) para que el usuario sepa dónde está."
+    ],
+    "liveRegion": "El contenedor de la colección usa aria-live=\"polite\" para anunciar cambios de filtrado o carga incremental, no cada card individual.",
+    "contrast": [
+      { "pair": "--on-surface on --surface-container-low", "theme": "light", "ratio": 16.1, "requirement": 4.5, "pass": true },
+      { "pair": "--on-surface-variant on --surface-container-low", "theme": "light", "ratio": 5.6, "requirement": 4.5, "pass": true },
+      { "pair": "--on-surface-low on --surface-container-low", "theme": "light", "ratio": 2.6, "requirement": 4.5, "pass": false },
+      { "pair": "--outline-high on --surface", "theme": "light", "ratio": 1.3, "requirement": 3.0, "pass": false },
+      { "pair": "--on-surface on --surface-container-low", "theme": "dark", "ratio": 13.2, "requirement": 4.5, "pass": true },
+      { "pair": "--on-surface-variant on --surface-container-low", "theme": "dark", "ratio": 8.4, "requirement": 4.5, "pass": true }
+    ],
+    "touchTarget": {
+      "min": "44x44dp",
+      "achievedBy": "El container navegable siempre supera el mínimo. Las acciones internas alcanzan 44dp mediante padding, sin aumentar su tamaño visual. El área táctil de dos acciones adyacentes nunca se solapa: separación mínima --spacing2."
+    },
+    "reducedMotion": "Con prefers-reduced-motion: reduce se desactivan el container transform y el scale del pressed; el cambio de estado se resuelve solo con opacidad.",
+    "wcag": ["1.3.1", "1.4.3", "1.4.11", "2.1.1", "2.4.3", "2.4.7", "2.5.5", "2.5.8", "4.1.2"]
+  },
+
+  "code": {
+    "html": "<a class=\"nodo-card nodo-card--elevated\" href=\"/movimientos/8842\" aria-labelledby=\"card-8842-title\" aria-describedby=\"card-8842-desc\">\n  <span class=\"nodo-card__state-layer\" aria-hidden=\"true\"></span>\n  <img class=\"nodo-card__media\" src=\"/img/recibo.webp\" alt=\"\">\n  <span class=\"nodo-card__content\">\n    <span class=\"nodo-card__headline\" id=\"card-8842-title\">Transferencia a Ana Ruiz</span>\n    <span class=\"nodo-card__subhead\">Hoy, 14:32</span>\n    <span class=\"nodo-card__supporting\" id=\"card-8842-desc\">Enviada desde tu cuenta principal</span>\n  </span>\n</a>",
+    "css": ".nodo-card {\n  position: relative;\n  display: flex;\n  flex-direction: column;\n  gap: var(--spacing3);\n  padding: var(--spacing4);\n  border-radius: var(--radius-medium);\n  background: var(--surface-container-low);\n  color: var(--on-surface);\n  text-decoration: none;\n  isolation: isolate;\n  transition: box-shadow var(--transition-fast), transform var(--transition-fast);\n}\n.nodo-card--elevated { box-shadow: var(--elevation-1); }\n.nodo-card--filled   { background: var(--surface-container); box-shadow: none; }\n.nodo-card--outlined { background: var(--surface); box-shadow: none; border: 1px solid var(--outline-high); }\n\n.nodo-card__state-layer {\n  position: absolute; inset: 0; z-index: 0;\n  border-radius: inherit;\n  background: var(--on-surface);\n  opacity: 0;\n  transition: opacity var(--transition-fast);\n  pointer-events: none;\n}\n.nodo-card > :not(.nodo-card__state-layer) { position: relative; z-index: 1; }\n\n.nodo-card:hover .nodo-card__state-layer { opacity: 0.08; }\n.nodo-card:hover.nodo-card--elevated { box-shadow: var(--elevation-2); }\n.nodo-card:focus-visible {\n  outline: 2px solid var(--nodo-primary-light);\n  outline-offset: 2px;\n}\n.nodo-card:focus-visible .nodo-card__state-layer { opacity: 0.10; }\n.nodo-card:active .nodo-card__state-layer { opacity: 0.10; }\n.nodo-card:active { transform: scale(0.995); box-shadow: var(--elevation-1); }\n\n.nodo-card[aria-selected=\"true\"] {\n  background: var(--primary-container);\n  border: 1.5px solid var(--primary);\n}\n.nodo-card[aria-disabled=\"true\"] {\n  pointer-events: none;\n  box-shadow: none;\n}\n.nodo-card[aria-disabled=\"true\"] > :not(.nodo-card__state-layer) { opacity: 0.38; }\n\n.nodo-card__media {\n  width: 100%;\n  aspect-ratio: 16 / 9;\n  object-fit: cover;\n  border-radius: var(--radius-small);\n  background: var(--surface-container);\n}\n.nodo-card__content { display: flex; flex-direction: column; gap: var(--spacing1); }\n.nodo-card__headline {\n  font-size: 16px; line-height: 24px; font-weight: 600;\n  color: var(--on-surface);\n  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;\n}\n.nodo-card__subhead {\n  font-size: 12px; line-height: 16px; font-weight: 600;\n  color: var(--on-surface-low);\n}\n.nodo-card__supporting {\n  font-size: 14px; line-height: 20px; font-weight: 400;\n  color: var(--on-surface-variant);\n  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;\n}\n.nodo-card__actions {\n  display: flex; justify-content: flex-end; gap: var(--spacing2);\n  padding-block: var(--spacing2);\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .nodo-card { transition: opacity 100ms linear; }\n  .nodo-card:active { transform: none; }\n}",
+    "usage": "<!-- Colección: cards coplanares, misma variante, itemSpacing --spacing2 -->\n<div class=\"nodo-card-grid\" role=\"list\">\n  <div role=\"listitem\"><!-- nodo-card --></div>\n</div>\n<style>\n.nodo-card-grid {\n  display: grid;\n  gap: var(--spacing2);\n  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));\n}\n</style>",
+    "cssVariables": ["--nodo-card-padding", "--nodo-card-radius", "--nodo-card-gap", "--nodo-card-media-ratio"]
+  },
+
+  "related": {
+    "composedOf": ["avatar", "badge", "button", "chip", "divider"],
+    "usedIn": ["template-state-product", "template-invoice"],
+    "alternatives": ["card/small", "card/large", "card-complex", "item-list", "banner"],
+    "patterns": ["Dashboard overview", "Checkout"]
+  },
+
+  "changelog": [
+    { "version": "1.0.0", "date": "2026-09-09", "change": "Primera especificación completa conforme al contrato de documentación: anatomía numerada, variantes nombradas, deltas de estado, motion y código de referencia.", "breaking": false }
+  ]
+}

@@ -1,0 +1,457 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jccxdsgnops.github.io/design-system/schema/component.schema.json",
+  "title": "NODO Design System — Component Documentation Contract",
+  "description": "Contrato de documentación de un componente. Un componente que valida contra este schema contiene la información suficiente para que un agente reconstruya la interfaz de forma determinista, sin acceso a Figma ni al código fuente.",
+  "type": "object",
+  "required": ["identity", "purpose", "anatomy", "variants", "specs", "states", "behavior", "composition", "guidelines", "accessibility", "code"],
+  "additionalProperties": false,
+
+  "$defs": {
+    "tokenRef": {
+      "type": "string",
+      "description": "Referencia a un token del sistema. Nunca un valor literal.",
+      "pattern": "^(--[a-zA-Z0-9.\\-]+|(display|headline|title|body|label)/(large|medium|small)|nodo\\.comp\\.[a-z0-9.\\-]+)$"
+    },
+    "tokenOrRaw": {
+      "oneOf": [
+        { "$ref": "#/$defs/tokenRef" },
+        { "type": "string", "pattern": "^(auto|inherit|none|[0-9]+(\\.[0-9]+)?(px|dp|%|fr|ms)?)$" }
+      ]
+    },
+    "styleMap": {
+      "type": "object",
+      "description": "Mapa propiedad → token. Es la unidad atómica de spec.",
+      "additionalProperties": false,
+      "properties": {
+        "background": { "$ref": "#/$defs/tokenRef" },
+        "foreground": { "$ref": "#/$defs/tokenRef" },
+        "border": { "$ref": "#/$defs/tokenRef" },
+        "borderWidth": { "$ref": "#/$defs/tokenOrRaw" },
+        "radius": { "$ref": "#/$defs/tokenRef" },
+        "elevation": { "$ref": "#/$defs/tokenRef" },
+        "typography": { "$ref": "#/$defs/tokenRef" },
+        "paddingBlock": { "$ref": "#/$defs/tokenRef" },
+        "paddingInline": { "$ref": "#/$defs/tokenRef" },
+        "gap": { "$ref": "#/$defs/tokenRef" },
+        "width": { "$ref": "#/$defs/tokenOrRaw" },
+        "height": { "$ref": "#/$defs/tokenOrRaw" },
+        "minHeight": { "$ref": "#/$defs/tokenOrRaw" },
+        "maxWidth": { "$ref": "#/$defs/tokenOrRaw" },
+        "opacity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "iconSize": { "$ref": "#/$defs/tokenOrRaw" },
+        "aspectRatio": { "type": "string" },
+        "stateLayer": { "$ref": "#/$defs/tokenRef" },
+        "stateLayerOpacity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "outline": { "$ref": "#/$defs/tokenRef" },
+        "outlineWidth": { "$ref": "#/$defs/tokenOrRaw" },
+        "outlineOffset": { "$ref": "#/$defs/tokenOrRaw" },
+        "textAlign": { "enum": ["start", "center", "end"] },
+        "maxLines": { "type": "integer", "minimum": 1 },
+        "transform": { "type": "string" }
+      }
+    }
+  },
+
+  "properties": {
+    "identity": {
+      "type": "object",
+      "required": ["id", "name", "category", "status", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)?$", "description": "kebab-case, con `/` solo para scoping jerárquico real. Ej: card/medium" },
+        "name": { "type": "string", "description": "Nombre humano. Ej: 'Card Medium'" },
+        "figmaKey": { "type": "string", "description": "Nombre exacto del componente en la librería de diseño" },
+        "category": { "enum": ["bars", "controls", "inputs", "data-display", "feedback", "navigation", "lists", "cards", "data-viz", "content", "templates", "auth", "natives"] },
+        "status": { "enum": ["stable", "beta", "experimental", "deprecated"] },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "since": { "type": "string" },
+        "deprecatedBy": { "type": "string" },
+        "owner": { "type": "string" },
+        "lastReview": { "type": "string", "format": "date" },
+        "platforms": { "type": "array", "items": { "enum": ["web", "ios", "android", "figma"] } },
+        "m3Equivalent": { "type": ["string", "null"], "description": "Componente análogo en Material Design 3, o null si es propio de NODO" }
+      }
+    },
+
+    "purpose": {
+      "type": "object",
+      "required": ["summary", "whenToUse", "whenNotToUse"],
+      "additionalProperties": false,
+      "properties": {
+        "summary": { "type": "string", "maxLength": 240, "description": "Una frase: qué hace y para quién." },
+        "description": { "type": "string" },
+        "whenToUse": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "whenNotToUse": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["case", "useInstead"],
+            "properties": {
+              "case": { "type": "string" },
+              "useInstead": { "type": "string", "description": "Id de un componente existente. Nunca 'nada' o 'custom'." }
+            }
+          }
+        }
+      }
+    },
+
+    "anatomy": {
+      "type": "object",
+      "required": ["parts"],
+      "additionalProperties": false,
+      "properties": {
+        "diagram": { "type": "string", "description": "Ruta a la imagen o bloque HTML del diagrama numerado" },
+        "layout": {
+          "type": "object",
+          "description": "Cómo se organizan las partes entre sí (auto-layout).",
+          "properties": {
+            "direction": { "enum": ["vertical", "horizontal", "grid", "stack", "absolute"] },
+            "align": { "enum": ["start", "center", "end", "stretch", "baseline"] },
+            "justify": { "enum": ["start", "center", "end", "space-between"] },
+            "wrap": { "type": "boolean" },
+            "gap": { "$ref": "#/$defs/tokenRef" }
+          }
+        },
+        "parts": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Partes numeradas del componente, en orden de lectura del diagrama.",
+          "items": {
+            "type": "object",
+            "required": ["index", "id", "name", "required", "description"],
+            "additionalProperties": false,
+            "properties": {
+              "index": { "type": "integer", "minimum": 1, "description": "Número en el diagrama de anatomía" },
+              "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+              "name": { "type": "string" },
+              "required": { "type": "boolean" },
+              "description": { "type": "string" },
+              "role": { "enum": ["container", "media", "text", "icon", "action", "decoration", "indicator", "region"] },
+              "cardinality": { "type": "string", "pattern": "^(1|0\\.\\.1|0\\.\\.n|1\\.\\.n)$", "default": "0..1" },
+              "contains": { "type": "array", "items": { "type": "string" }, "description": "Ids de partes hijas" },
+              "style": { "$ref": "#/$defs/styleMap" }
+            }
+          }
+        }
+      }
+    },
+
+    "variants": {
+      "type": "object",
+      "required": ["axes", "named", "variantCount"],
+      "additionalProperties": false,
+      "properties": {
+        "axes": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Ejes ortogonales del producto cartesiano de variantes.",
+          "items": {
+            "type": "object",
+            "required": ["id", "values", "default"],
+            "properties": {
+              "id": { "type": "string" },
+              "label": { "type": "string" },
+              "values": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+              "default": { "type": "string" }
+            }
+          }
+        },
+        "named": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Variantes con nombre propio (el equivalente a elevated/filled/outlined de M3). Cada una declara su override sobre la base.",
+          "items": {
+            "type": "object",
+            "required": ["id", "name", "description", "overrides"],
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "emphasis": { "enum": ["highest", "high", "medium", "low", "lowest"] },
+              "overrides": {
+                "type": "object",
+                "description": "Mapa partId → styleMap. Solo lo que cambia respecto de la base.",
+                "additionalProperties": { "$ref": "#/$defs/styleMap" }
+              }
+            }
+          }
+        },
+        "variantCount": { "type": "integer", "minimum": 1, "description": "DEBE ser igual al producto de las longitudes de todos los ejes. Validado en CI." }
+      }
+    },
+
+    "specs": {
+      "type": "object",
+      "required": ["base", "sizes", "measurements"],
+      "additionalProperties": false,
+      "properties": {
+        "base": {
+          "type": "object",
+          "description": "Mapa partId → styleMap para el estado default de la variante default.",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/styleMap" }
+        },
+        "sizes": {
+          "type": "array",
+          "description": "Tiers de tamaño reales del componente. NO usar la escala genérica xSmall..xLarge si el componente no la implementa.",
+          "items": {
+            "type": "object",
+            "required": ["id", "overrides"],
+            "properties": {
+              "id": { "type": "string" },
+              "label": { "type": "string" },
+              "overrides": { "type": "object", "additionalProperties": { "$ref": "#/$defs/styleMap" } }
+            }
+          }
+        },
+        "measurements": {
+          "type": "object",
+          "required": ["radius", "padding"],
+          "properties": {
+            "radius": { "$ref": "#/$defs/tokenRef" },
+            "padding": { "type": "object", "properties": { "block": { "$ref": "#/$defs/tokenRef" }, "inline": { "$ref": "#/$defs/tokenRef" } } },
+            "gap": { "$ref": "#/$defs/tokenRef", "description": "Separación interna entre partes" },
+            "itemSpacing": { "$ref": "#/$defs/tokenRef", "description": "Separación entre instancias del componente en una colección" },
+            "minTouchTarget": { "type": "string", "default": "44x44dp" },
+            "alignment": { "enum": ["start", "center", "end"] },
+            "resolved": { "type": "object", "description": "Valores px resueltos, solo informativos para el render de la doc.", "additionalProperties": { "type": "string" } }
+          }
+        },
+        "typography": {
+          "type": "array",
+          "description": "Mapeo explícito parte → rol tipográfico. Sin 'label/medium o body/small'.",
+          "items": {
+            "type": "object",
+            "required": ["part", "token"],
+            "properties": { "part": { "type": "string" }, "token": { "$ref": "#/$defs/tokenRef" }, "maxLines": { "type": "integer" } }
+          }
+        }
+      }
+    },
+
+    "states": {
+      "type": "object",
+      "required": ["default", "list"],
+      "additionalProperties": false,
+      "properties": {
+        "interactive": { "type": "boolean", "default": true },
+        "interactionModel": {
+          "enum": ["activatable", "editable", "selectable", "static"],
+          "default": "activatable",
+          "description": "Determina qué estados son obligatorios. activatable: hover, focus-visible, pressed, disabled. editable: hover, focused, error, disabled. selectable: hover, focus-visible, selected, disabled. static: solo default."
+        },
+        "default": { "type": "string", "const": "default" },
+        "list": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "trigger", "delta"],
+            "properties": {
+              "id": { "type": "string", "description": "default | hover | focus-visible | pressed | selected | dragged | disabled | loading | error | ..." },
+              "trigger": { "type": "string", "description": "Qué provoca el estado. Ej: 'pointer sobre el container'" },
+              "delta": {
+                "type": "object",
+                "description": "SOLO lo que cambia respecto de `default`. Mapa partId → styleMap. Un estado sin delta es un error de documentación.",
+                "additionalProperties": { "$ref": "#/$defs/styleMap" }
+              },
+              "announcement": { "type": "string", "description": "Qué anuncia el lector de pantalla al entrar en este estado" },
+              "notes": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "behavior": {
+      "type": "object",
+      "required": ["interactions"],
+      "additionalProperties": false,
+      "properties": {
+        "interactions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "trigger", "result", "motion"],
+            "properties": {
+              "id": { "type": "string" },
+              "trigger": { "type": "string", "description": "tap | long-press | swipe-left | drag | scroll | timeout | focus" },
+              "result": { "type": "string" },
+              "motion": {
+                "type": "object",
+                "required": ["duration", "easing"],
+                "properties": {
+                  "pattern": { "enum": ["container-transform", "forward-backward", "fade", "fade-through", "shared-axis", "expand-collapse", "none"] },
+                  "duration": { "type": "string", "description": "Token o ms. Ej: --duration-medium2 / 300ms" },
+                  "easing": { "type": "string" },
+                  "properties": { "type": "array", "items": { "type": "string" } }
+                }
+              }
+            }
+          }
+        },
+        "gestures": { "type": "array", "items": { "type": "object", "properties": { "gesture": { "type": "string" }, "action": { "type": "string" }, "constraint": { "type": "string" } } } },
+        "overflow": { "type": "object", "properties": { "strategy": { "enum": ["truncate", "wrap", "scroll", "expand", "none"] }, "affordance": { "type": "string" } } },
+        "reducedMotion": { "type": "string", "description": "Comportamiento con prefers-reduced-motion: reduce" },
+        "loading": { "type": "string" },
+        "emptyState": { "type": "string" }
+      }
+    },
+
+    "composition": {
+      "type": "object",
+      "required": ["slots"],
+      "additionalProperties": false,
+      "properties": {
+        "slots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "accepts", "cardinality", "required"],
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "accepts": { "type": "array", "items": { "enum": ["text", "icon", "image", "video", "component", "node"] } },
+              "allowedComponents": { "type": "array", "items": { "type": "string" }, "description": "Lista blanca de ids de componentes NODO permitidos dentro del slot" },
+              "cardinality": { "type": "string", "pattern": "^(1|0\\.\\.1|0\\.\\.n|1\\.\\.n|0\\.\\.[0-9]+)$" },
+              "required": { "type": "boolean" },
+              "defaultPart": { "type": "string" },
+              "constraints": { "type": "string" }
+            }
+          }
+        },
+        "props": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "type", "default"],
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string" },
+              "enum": { "type": "array", "items": { "type": "string" } },
+              "default": {},
+              "description": { "type": "string" },
+              "required": { "type": "boolean", "default": false }
+            }
+          }
+        },
+        "events": { "type": "array", "items": { "type": "object", "properties": { "name": { "type": "string" }, "payload": { "type": "string" }, "description": { "type": "string" } } } },
+        "nestingRules": { "type": "array", "items": { "type": "string" }, "description": "Reglas duras de composición. Ej: 'nunca anidar card dentro de card'" }
+      }
+    },
+
+    "responsive": {
+      "type": "object",
+      "properties": {
+        "fluid": { "type": "boolean" },
+        "breakpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "behavior"],
+            "properties": {
+              "id": { "enum": ["compact", "medium", "expanded", "large", "extra-large"] },
+              "minWidth": { "type": "string" },
+              "behavior": { "type": "string" },
+              "columns": { "type": "integer" },
+              "overrides": { "type": "object", "additionalProperties": { "$ref": "#/$defs/styleMap" } }
+            }
+          }
+        }
+      }
+    },
+
+    "guidelines": {
+      "type": "object",
+      "required": ["do", "dont", "content"],
+      "additionalProperties": false,
+      "properties": {
+        "do": { "type": "array", "minItems": 2, "items": { "type": "object", "required": ["rule"], "properties": { "rule": { "type": "string" }, "rationale": { "type": "string" }, "example": { "type": "string" } } } },
+        "dont": { "type": "array", "minItems": 2, "items": { "type": "object", "required": ["rule"], "properties": { "rule": { "type": "string" }, "rationale": { "type": "string" }, "example": { "type": "string" } } } },
+        "content": {
+          "type": "object",
+          "required": ["rules"],
+          "properties": {
+            "rules": { "type": "array", "items": { "type": "string" } },
+            "goodExample": { "type": "string" },
+            "badExample": { "type": "string" },
+            "maxLengths": { "type": "object", "additionalProperties": { "type": "integer" } },
+            "localization": { "type": "string", "description": "Factor de expansión y estrategia de truncado" }
+          }
+        },
+        "placement": { "type": "array", "items": { "type": "string" } },
+        "density": { "type": "string" }
+      }
+    },
+
+    "accessibility": {
+      "type": "object",
+      "required": ["role", "accessibleName", "keyboard", "focus", "contrast", "touchTarget"],
+      "additionalProperties": false,
+      "properties": {
+        "role": { "type": "string", "description": "Rol nativo o ARIA. Ej: 'article' o 'button'" },
+        "roleRationale": { "type": "string" },
+        "accessibleName": { "type": "string", "description": "De dónde sale el nombre accesible" },
+        "ariaAttributes": { "type": "array", "items": { "type": "object", "properties": { "attribute": { "type": "string" }, "value": { "type": "string" }, "when": { "type": "string" } } } },
+        "keyboard": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "object", "required": ["key", "action"], "properties": { "key": { "type": "string" }, "action": { "type": "string" } } }
+        },
+        "tabStops": { "type": "string", "description": "Cuántos tab stops genera y en qué orden" },
+        "focus": { "type": "object", "properties": { "indicator": { "$ref": "#/$defs/tokenRef" }, "width": { "type": "string" }, "offset": { "type": "string" }, "trapped": { "type": "boolean" }, "restoreTo": { "type": "string" } } },
+        "screenReader": { "type": "array", "items": { "type": "string" } },
+        "liveRegion": { "type": "string" },
+        "contrast": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["pair", "theme", "ratio", "requirement", "pass"],
+            "properties": {
+              "pair": { "type": "string", "description": "foreground on background, en tokens" },
+              "theme": { "enum": ["light", "dark"] },
+              "ratio": { "type": "number" },
+              "requirement": { "type": "number" },
+              "pass": { "type": "boolean" }
+            }
+          }
+        },
+        "touchTarget": { "type": "object", "required": ["min", "achievedBy"], "properties": { "min": { "type": "string" }, "achievedBy": { "type": "string" } } },
+        "reducedMotion": { "type": "string" },
+        "wcag": { "type": "array", "items": { "type": "string" }, "description": "Criterios WCAG 2.2 AA cubiertos. Ej: '1.4.3', '2.4.7'" }
+      }
+    },
+
+    "code": {
+      "type": "object",
+      "required": ["html"],
+      "additionalProperties": false,
+      "properties": {
+        "html": { "type": "string", "description": "Implementación de referencia. Solo tokens, sin literales." },
+        "css": { "type": "string" },
+        "usage": { "type": "string", "description": "Ejemplo de uso mínimo" },
+        "cssVariables": { "type": "array", "items": { "type": "string" }, "description": "Variables de personalización expuestas por el componente" },
+        "platform": { "type": "object", "properties": { "react": { "type": "string" }, "swiftui": { "type": "string" }, "compose": { "type": "string" } } }
+      }
+    },
+
+    "related": {
+      "type": "object",
+      "properties": {
+        "composedOf": { "type": "array", "items": { "type": "string" } },
+        "usedIn": { "type": "array", "items": { "type": "string" } },
+        "alternatives": { "type": "array", "items": { "type": "string" } },
+        "patterns": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "changelog": {
+      "type": "array",
+      "items": { "type": "object", "required": ["version", "date", "change"], "properties": { "version": { "type": "string" }, "date": { "type": "string" }, "change": { "type": "string" }, "breaking": { "type": "boolean" } } }
+    }
+  }
+}

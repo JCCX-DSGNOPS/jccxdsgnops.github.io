@@ -1,0 +1,307 @@
+{
+  "$schema": "./schema/architecture.schema.json",
+  "meta": {
+    "name": "NODO Design System",
+    "version": "4.0.0",
+    "source": "nodo-design-system.html",
+    "analyzedAt": "2026-09-09",
+    "baseline": "Material Design 3 (parcialmente adoptado)",
+    "publicComponents": 128,
+    "documentedVariants": 3500,
+    "categories": 13,
+    "renderTarget": "Single-file HTML estático (GitHub Pages, sin build)"
+  },
+
+  "layers": {
+    "description": "NODO usa 2 de las 3 capas de token de M3. Falta la capa `comp`, que es exactamente la que un agente necesita para reconstruir un componente sin adivinar.",
+    "L0_primitives": {
+      "m3Equivalent": "md.ref.palette.*",
+      "presente": true,
+      "naming": "<ramp>/<step>",
+      "ramps": ["neutrals", "blue", "skyblue", "purple", "red", "green", "yellow", "orange", "pink", "lime", "teal", "sand", "jade", "fuchsia", "lightblue", "olive"],
+      "steps": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+      "extraSteps": { "neutrals": ["white", "black"] },
+      "regla": "Un componente NUNCA referencia una primitiva. Siempre pasa por L1."
+    },
+    "L1_system": {
+      "m3Equivalent": "md.sys.color.* / md.sys.typescale.* / md.sys.shape.*",
+      "presente": true,
+      "naming": "--<role>[-<modifier>] y --on-<role>[-<modifier>]",
+      "grupos": ["Primary", "Surface", "Feedback", "Extended"],
+      "contextos": ["light", "dark"],
+      "mecanismo": ":root { ... } + [data-theme=\"dark\"] { ... }"
+    },
+    "L2_component": {
+      "m3Equivalent": "md.comp.<component>.<element>.<property>[.<state>]",
+      "presente": false,
+      "gap": "CRÍTICO",
+      "impacto": "Sin esta capa la doc dice 'usa --primary' pero no dice EN QUÉ ELEMENTO ni EN QUÉ ESTADO. Un agente no puede reconstruir el componente de forma determinista.",
+      "namingPropuesto": "nodo.comp.<component>[.<variant>].<element>.<property>.<state>",
+      "ejemplo": "nodo.comp.card.elevated.container.color.hover -> --surface-container"
+    }
+  },
+
+  "foundations": {
+    "color": {
+      "seccion": "#foundation-colors + #foundation-scheme + #foundation-combinations",
+      "primitivas": { "ramps": 16, "stepsPorRamp": "10-12" },
+      "semanticos": {
+        "Primary": ["--primary", "--primary-emphasis", "--primary-container", "--on-primary", "--on-primary-emphasis", "--on-primary-container", "--secondary", "--secondary-container", "--secondary-emphasis", "--on-secondary", "--on-secondary-container"],
+        "Surface": ["--surface", "--surface-container", "--surface-container-low", "--surface-container-lowest", "--surface-container-high", "--surface-container-highest", "--on-surface", "--on-surface-variant", "--on-surface-low", "--inverse-surface", "--inverse-on-surface", "--outline", "--outline-high", "--outline-low"],
+        "Feedback": ["--error", "--error-container", "--on-error", "--on-error-container", "--success", "--success-container", "--on-success", "--on-success-container", "--warning", "--warning-container", "--info", "--info-container"],
+        "Extended": ["--plin", "--plin-container", "--complementary1", "--complementary1-container", "--complementary2", "--complementary2-container", "--complementary3", "--complementary3-container"]
+      },
+      "gaps": [
+        "Faltan pares `on-` para warning/info/plin/complementary* (documentados en combinaciones pero no como token).",
+        "No existe capa de state-layer (M3: hover 8%, focus 10%, pressed 10%, dragged 16%). NODO tiene escala de opacidad genérica pero sin rol asignado.",
+        "No hay `--scrim`, `--shadow`, `--surface-tint`."
+      ]
+    },
+    "typography": {
+      "seccion": "#foundation-typography",
+      "typeface": "Inter",
+      "fallback": "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+      "roles": ["display", "headline", "title", "body", "label"],
+      "escala": [
+        { "token": "display/large", "size": 57, "lineHeight": 64, "weight": 700 },
+        { "token": "display/medium", "size": 45, "lineHeight": 52, "weight": 700 },
+        { "token": "display/small", "size": 36, "lineHeight": 44, "weight": 700 },
+        { "token": "headline/large", "size": 32, "lineHeight": 40, "weight": 700 },
+        { "token": "headline/medium", "size": 28, "lineHeight": 36, "weight": 700 },
+        { "token": "headline/small", "size": 24, "lineHeight": 32, "weight": 600 },
+        { "token": "title/large", "size": 22, "lineHeight": 28, "weight": 600 },
+        { "token": "title/medium", "size": 16, "lineHeight": 24, "weight": 600 },
+        { "token": "title/small", "size": 14, "lineHeight": 20, "weight": 600 },
+        { "token": "body/large", "size": 16, "lineHeight": 24, "weight": 400 },
+        { "token": "body/medium", "size": 14, "lineHeight": 20, "weight": 400 },
+        { "token": "body/small", "size": 12, "lineHeight": 16, "weight": 400 },
+        { "token": "label/large", "size": 14, "lineHeight": 20, "weight": 600 },
+        { "token": "label/medium", "size": 12, "lineHeight": 16, "weight": 600 },
+        { "token": "label/small", "size": 11, "lineHeight": 16, "weight": 600 }
+      ],
+      "gaps": ["Sin letter-spacing (M3 lo define por rol).", "Sin variantes 'emphasized'.", "Sin mapeo rol→uso obligatorio por componente."]
+    },
+    "spacing": {
+      "seccion": "#foundation-spacing",
+      "base": 4,
+      "halfStep": 2,
+      "escala": { "--none": 0, "--spacing0.5": 2, "--spacing1": 4, "--spacing2": 8, "--spacing3": 12, "--spacing4": 16, "--spacing5": 20, "--spacing6": 24, "--spacing7": 28, "--spacing8": 32, "--spacing9": 36, "--spacing10": 40, "--spacing11": 44, "--spacing12": 48, "--spacing13": 52, "--spacing14": 56, "--spacing15": 60 }
+    },
+    "shape": {
+      "seccion": "#foundation-radius",
+      "escala": { "--radius-xSmall": 4, "--radius-small": 8, "--radius-medium": 12, "--radius-large": 16, "--radius-large-increased": 20, "--radius-xLarge": 24, "--radius-2xLarge": 28, "--radius-3xLarge": 32, "--radius-4xLarge": 36, "--radius-5xLarge": 40, "--radius-pill": 1000 },
+      "gaps": ["Sin radios asimétricos (top-only para sheets/bottom bars).", "Sin `shape morph` en pressed (M3 Expressive)."]
+    },
+    "elevation": {
+      "seccion": "#foundation-elevation",
+      "niveles": [
+        { "token": "--elevation-1", "uso": "Cards en reposo, filas de lista" },
+        { "token": "--elevation-2", "uso": "Botones elevados, chips en drag" },
+        { "token": "--elevation-3", "uso": "Dropdowns, popovers, tooltips" },
+        { "token": "--elevation-4", "uso": "Modales, sheets, dialogs" }
+      ],
+      "themeAware": true,
+      "gaps": ["M3 usa 6 niveles (0-5) + surface tint. NODO usa 4 y solo sombra."]
+    },
+    "opacity": {
+      "seccion": "#foundation-opacity",
+      "escala": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+      "strokes": { "default": "1px", "emphasis": "1.5px", "focus": "2px" },
+      "gaps": ["Escala sin rol semántico. Falta mapeo a state layers y a disabled (M3: contenido 38%, contenedor 12%)."]
+    },
+    "motion": {
+      "presente": "parcial",
+      "definido": { "--transition-fast": "150ms cubic-bezier(0.4,0,0.2,1)", "--transition-medium": "250ms cubic-bezier(0.4,0,0.2,1)" },
+      "gap": "CRÍTICO. Solo existe en el CSS del sitio de documentación, NO como foundation publicada ni referenciada por ningún componente. Falta: duration scale, easing set (standard/emphasized/decelerate/accelerate), transition patterns (container transform, fade-through, shared axis), y `prefers-reduced-motion`."
+    },
+    "layout": {
+      "presente": false,
+      "gap": "CRÍTICO. No hay breakpoints, grid, ni panes. M3 define compact/medium/expanded/large/extra-large. NODO no documenta comportamiento responsive de ningún componente."
+    },
+    "iconography": { "presente": false, "gap": "No hay set de iconos, tamaños (16/20/24/40dp) ni reglas de optical alignment." },
+    "interactionStates": { "presente": false, "gap": "CRÍTICO. Los estados se listan como chips de texto, sin especificar el delta visual (qué token cambia, cuánta opacidad, qué elevación)." }
+  },
+
+  "taxonomy": {
+    "categorias": [
+      { "id": "bars", "nombre": "Bars", "descripcion": "Top- and bottom-anchored navigation surfaces.", "componentes": 11 },
+      { "id": "controls", "nombre": "Controls", "descripcion": "Interactive primitives users tap, toggle, and drag.", "componentes": 19 },
+      { "id": "inputs", "nombre": "Inputs", "descripcion": "Text entry and selection fields.", "componentes": 10 },
+      { "id": "data-display", "nombre": "Data Display", "descripcion": "Badges, labels, avatars y encabezados.", "componentes": 9 },
+      { "id": "feedback", "nombre": "Feedback", "descripcion": "Notificaciones, tooltips y loaders.", "componentes": 11 },
+      { "id": "navigation", "nombre": "Navigation", "descripcion": "Tabs, steppers, progreso y paginación.", "componentes": 6 },
+      { "id": "lists", "nombre": "Lists", "descripcion": "Filas y colecciones de ítems.", "componentes": 14 },
+      { "id": "cards", "nombre": "Cards", "descripcion": "Self-contained content previews.", "componentes": 5 },
+      { "id": "data-viz", "nombre": "Data Viz", "descripcion": "Visualizaciones compactas de datos cuantitativos.", "componentes": 6 },
+      { "id": "content", "nombre": "Content", "descripcion": "Banners, acordeones, matrices y bloques de contenido.", "componentes": 21 },
+      { "id": "templates", "nombre": "Templates", "descripcion": "Composiciones de pantalla completa.", "componentes": 10 },
+      { "id": "auth", "nombre": "Auth", "descripcion": "Autenticación y verificación.", "componentes": 2 },
+      { "id": "natives", "nombre": "Natives", "descripcion": "Superficies provistas por el SO.", "componentes": 4 }
+    ],
+    "variantDimensions": {
+      "universo": ["size", "color/emphasis", "state", "icon placement", "icon", "emphasis/type", "layout"],
+      "problema": "`layout` aparece como dimensión pero en realidad es el valor por defecto asignado a los componentes con ≤3 variantes: es un placeholder del generador, no una dimensión real."
+    },
+    "namingConvention": {
+      "actual": "Mezcla de 3 convenciones: snake_case (`banner_rtd`, `chip_number`), kebab-case (`item-list`, `top-navbar`) y slash-scoped (`card/medium`, `card-balance/visa`).",
+      "propuesta": "kebab-case para el id, slash solo para scoping jerárquico real: `<family>/<member>`. Ej: `card/medium`, `banner/rtd`, `chip/number`.",
+      "idHTML": "comp-detail-<slug(id)>"
+    }
+  },
+
+  "documentationArchitecture": {
+    "seccionesGlobales": [
+      { "id": "getting-started", "tipo": "Foundation" },
+      { "id": "foundation-colors", "tipo": "Foundation" },
+      { "id": "foundation-scheme", "tipo": "Foundation" },
+      { "id": "foundation-typography", "tipo": "Foundation" },
+      { "id": "foundation-spacing", "tipo": "Foundation" },
+      { "id": "foundation-radius", "tipo": "Foundation" },
+      { "id": "foundation-opacity", "tipo": "Foundation" },
+      { "id": "foundation-elevation", "tipo": "Foundation" },
+      { "id": "foundation-combinations", "tipo": "Foundation" },
+      { "id": "component-catalog", "tipo": "Index" },
+      { "id": "component-details", "tipo": "Reference" },
+      { "id": "token-reference", "tipo": "Reference" },
+      { "id": "anatomy-index", "tipo": "Reference" },
+      { "id": "usage-guidelines", "tipo": "Reference" },
+      { "id": "pattern-library", "tipo": "Reference" },
+      { "id": "resources", "tipo": "Reference" }
+    ],
+    "estructuraComponenteActual": {
+      "header": ["cat-tag", "h3 (nombre)", "descripción corta", "variant-count + code(figmaKey)"],
+      "tabs": ["overview", "specs", "guidelines", "accessibility"],
+      "overview": ["párrafo intro", "Key features", "Variant dimensions", "When to use"],
+      "specs": ["Sizing", "Typography", "Color tokens", "Spacing tokens", "Radius token", "States"],
+      "guidelines": ["Do / Don't", "Usage patterns", "Content guidelines"],
+      "accessibility": ["ARIA role & attributes", "Keyboard interaction", "Focus management", "Screen reader", "Touch targets", "Contrast"]
+    },
+    "diagnostico": {
+      "fortalezas": [
+        "Tabs consistentes en los 128 componentes: contrato estable y parseable.",
+        "Doble capa de token (primitiva → semántica) con resolución light/dark explícita en tabla.",
+        "Índice plano (anatomy-index) + catálogo por categoría + búsqueda ⌘K con índice JSON embebido.",
+        "Cero dependencias externas: un solo archivo, funciona offline y en GitHub Pages.",
+        "A11y presente como tab de primera clase (no como apéndice)."
+      ],
+      "debilidades": [
+        { "id": "D1", "severidad": "crítica", "issue": "Contenido plantillado, no específico. `Sizing` es idéntico (xSmall 32dp … xLarge 64dp) en un Button y en una Card. Los tokens de color se listan sin rol ni elemento." },
+        { "id": "D2", "severidad": "crítica", "issue": "No hay ANATOMÍA. La sección se llama 'Anatomy Index' pero es una tabla de inventario. Nunca se numeran las partes (container, media, headline, subhead, supporting text, actions)." },
+        { "id": "D3", "severidad": "crítica", "issue": "No hay preview renderizado ni código. Un agente no tiene un artefacto ejecutable de referencia." },
+        { "id": "D4", "severidad": "alta", "issue": "Estados listados sin especificación de delta: 'hover/elevated' no dice qué cambia." },
+        { "id": "D5", "severidad": "alta", "issue": "Sin API/props/slots. La composición es inferida, no declarada." },
+        { "id": "D6", "severidad": "alta", "issue": "Sin motion ni behavior specs por componente." },
+        { "id": "D7", "severidad": "media", "issue": "Sin responsive/breakpoints." },
+        { "id": "D8", "severidad": "media", "issue": "`variant-count` no es verificable: no existe la matriz de variantes que sustente los 960 del Button." },
+        { "id": "D9", "severidad": "media", "issue": "Nomenclatura inconsistente entre snake_case, kebab-case y slash." },
+        { "id": "D10", "severidad": "baja", "issue": "Sin versionado, status (stable/beta/deprecated), owner ni changelog por componente." }
+      ]
+    }
+  },
+
+  "materialComparison": {
+    "alineado": [
+      "Arquitectura de color en 2 capas ref→sys con roles `on-*` y `*-container`.",
+      "Familia surface-container en 5 niveles (lowest/low/base/high/highest), idéntica a M3.",
+      "Escala tipográfica de 5 roles × 3 tamaños (display/headline/title/body/label).",
+      "Shape scale progresiva con pill.",
+      "Contraste 4.5:1 / 3:1 y touch target mínimo declarados.",
+      "Do/Don't como patrón de guideline."
+    ],
+    "divergente": [
+      { "aspecto": "Nombres de token", "m3": "md.sys.color.on-surface-variant", "nodo": "--on-surface-variant", "veredicto": "Aceptable: CSS-first. Pero pierde el namespace y el tipo (ref/sys/comp)." },
+      { "aspecto": "outline-variant", "m3": "outline / outline-variant", "nodo": "outline / outline-high / outline-low", "veredicto": "NODO es más granular pero rompe compat conceptual." },
+      { "aspecto": "Elevación", "m3": "6 niveles + surface tint", "nodo": "4 niveles, solo box-shadow", "veredicto": "Simplificación válida para web; documentar explícitamente que no hay tint." },
+      { "aspecto": "Feedback semántico", "m3": "solo error", "nodo": "error/success/warning/info", "veredicto": "NODO mejora a M3 aquí." },
+      { "aspecto": "Variantes de componente", "m3": "elevated / filled / outlined (nombradas)", "nodo": "'emphasis/type' (sin enumerar)", "veredicto": "Regresión: hay que nombrar y especificar cada variante." },
+      { "aspecto": "Estructura de spec", "m3": "Overview / Specs / Guidelines / Accessibility + Anatomy + Measurements + Behavior", "nodo": "Overview / Specs / Guidelines / Accessibility", "veredicto": "Faltan Anatomy, Measurements y Behavior." }
+    ],
+    "aAdoptar": [
+      "Diagrama de anatomía numerado (1..n) con leyenda por parte.",
+      "Tabla de tokens organizada por ESTADO → ELEMENTO → PROPIEDAD (el patrón de 'token module' de M3).",
+      "Bloque de Measurements independiente (radius, padding, gap entre instancias, alineación).",
+      "Sección Behavior (expanding, navigation, gestures, scrolling).",
+      "Variantes nombradas y especificadas por separado, no como una dimensión abstracta.",
+      "State layers con opacidades canónicas: hover 8%, focus 10%, pressed 10%, dragged 16%; disabled contenido 38% / contenedor 12%.",
+      "Capa de component tokens (md.comp.*) para cerrar el gap de determinismo."
+    ]
+  },
+
+  "documentationFramework": {
+    "principio": "Un componente está documentado cuando un agente puede reconstruirlo sin abrir Figma ni leer el código fuente.",
+    "seccionesObligatorias": [
+      { "orden": 1, "id": "identity", "nombre": "Identity", "obligatorio": true, "responde": "¿Qué es y cómo se llama en cada sistema?" },
+      { "orden": 2, "id": "purpose", "nombre": "Purpose", "obligatorio": true, "responde": "¿Para qué existe? ¿Cuándo usarlo y cuándo NO?" },
+      { "orden": 3, "id": "anatomy", "nombre": "Anatomy", "obligatorio": true, "responde": "¿De qué partes está hecho? ¿Cuáles son obligatorias?" },
+      { "orden": 4, "id": "variants", "nombre": "Variants", "obligatorio": true, "responde": "¿Qué formas nombradas existen y en qué se diferencian?" },
+      { "orden": 5, "id": "specs", "nombre": "Specs / Measurements", "obligatorio": true, "responde": "¿Qué valor exacto tiene cada propiedad de cada parte?" },
+      { "orden": 6, "id": "states", "nombre": "States", "obligatorio": true, "responde": "¿Qué cambia visualmente en cada estado?" },
+      { "orden": 7, "id": "behavior", "nombre": "Behavior & Motion", "obligatorio": true, "responde": "¿Cómo responde a la interacción y al tiempo?" },
+      { "orden": 8, "id": "composition", "nombre": "Composition / Slots & API", "obligatorio": true, "responde": "¿Qué acepta dentro y con qué props se configura?" },
+      { "orden": 9, "id": "responsive", "nombre": "Responsive", "obligatorio": false, "responde": "¿Cómo se adapta por breakpoint?" },
+      { "orden": 10, "id": "guidelines", "nombre": "Guidelines", "obligatorio": true, "responde": "¿Qué hacer y qué no? ¿Cómo escribir su contenido?" },
+      { "orden": 11, "id": "accessibility", "nombre": "Accessibility", "obligatorio": true, "responde": "¿Cómo funciona con teclado, lector de pantalla y contraste?" },
+      { "orden": 12, "id": "code", "nombre": "Code", "obligatorio": true, "responde": "¿Cuál es la implementación de referencia ejecutable?" },
+      { "orden": 13, "id": "related", "nombre": "Related & Governance", "obligatorio": false, "responde": "¿Con qué se relaciona? ¿Quién lo mantiene? ¿Qué versión?" }
+    ],
+    "tabsRenderizadas": {
+      "Overview": ["identity", "purpose", "variants"],
+      "Anatomy": ["anatomy", "composition"],
+      "Specs": ["specs", "states", "responsive"],
+      "Behavior": ["behavior"],
+      "Guidelines": ["guidelines"],
+      "Accessibility": ["accessibility"],
+      "Code": ["code"]
+    }
+  },
+
+  "agentContract": {
+    "objetivo": "Definir el mínimo de información que permite a un agente generar una interfaz correcta.",
+    "reglasDeterministas": [
+      "R1. Toda propiedad visual debe expresarse como token, nunca como literal. Si no existe token, el componente no está listo para documentar.",
+      "R2. Cada parte de la anatomía debe tener: id, nombre, required (bool), y un mapa completo de propiedades por estado.",
+      "R3. Cada estado debe declararse como DELTA sobre `default`, no como descripción prosaica.",
+      "R4. Cada variante debe declarar el override exacto respecto de la variante base.",
+      "R5. La matriz de variantes debe ser el producto cartesiano explícito de sus ejes; `variantCount` debe ser calculable, no declarado.",
+      "R6. Todo slot debe declarar: nombre, tipo aceptado (texto/icono/componente/media), cardinalidad (0..1, 0..n, 1) y componentes permitidos.",
+      "R7. Toda interacción debe declarar: trigger, resultado, duración y easing.",
+      "R8. Todo componente interactivo debe declarar rol ARIA, tab stops, teclas y nombre accesible.",
+      "R9. El bloque `code` debe ser HTML+CSS ejecutable que use solo tokens del sistema.",
+      "R10. Cada componente debe superar el `completenessChecklist` para publicarse."
+    ],
+    "completenessChecklist": [
+      { "id": "C01", "grupo": "identity", "check": "id, name, figmaKey, category, status y version presentes" },
+      { "id": "C02", "grupo": "purpose", "check": "≥1 `whenToUse` y ≥1 `whenNotToUse` con alternativa nombrada" },
+      { "id": "C03", "grupo": "anatomy", "check": "≥1 parte marcada required:true (el container)" },
+      { "id": "C04", "grupo": "anatomy", "check": "Todas las partes tienen index numérico contiguo para el diagrama" },
+      { "id": "C05", "grupo": "variants", "check": "Cada variante tiene nombre propio y overrides explícitos" },
+      { "id": "C06", "grupo": "variants", "check": "variantCount === producto de la longitud de todos los ejes" },
+      { "id": "C07", "grupo": "specs", "check": "Cada parte tiene tokens para color, typography, spacing y shape según aplique" },
+      { "id": "C08", "grupo": "specs", "check": "Ningún valor literal (#hex, px sueltos) fuera de `measurements.resolved`" },
+      { "id": "C09", "grupo": "specs", "check": "Measurements incluye radius, padding, gap e itemSpacing" },
+      { "id": "C10", "grupo": "states", "check": "`default` declarado + ≥ hover, focus, pressed, disabled si es interactivo" },
+      { "id": "C11", "grupo": "states", "check": "Cada estado ≠ default declara al menos un delta" },
+      { "id": "C12", "grupo": "states", "check": "disabled declara opacidad de contenido y de contenedor" },
+      { "id": "C13", "grupo": "behavior", "check": "≥1 interacción con trigger + result + motion.duration + motion.easing" },
+      { "id": "C14", "grupo": "behavior", "check": "Declara comportamiento con prefers-reduced-motion" },
+      { "id": "C15", "grupo": "composition", "check": "Todos los slots tienen tipo y cardinalidad" },
+      { "id": "C16", "grupo": "composition", "check": "Props tienen tipo, default y valores permitidos" },
+      { "id": "C17", "grupo": "responsive", "check": "Declara comportamiento en compact/medium/expanded o `fluid: true`" },
+      { "id": "C18", "grupo": "guidelines", "check": "≥2 do y ≥2 dont, cada uno accionable (no genérico)" },
+      { "id": "C19", "grupo": "guidelines", "check": "Content guidelines con ejemplo bueno y malo literal" },
+      { "id": "C20", "grupo": "accessibility", "check": "role, accessibleName y keyboard map declarados" },
+      { "id": "C21", "grupo": "accessibility", "check": "Contraste verificado en light Y dark, con ratio numérico" },
+      { "id": "C22", "grupo": "accessibility", "check": "Touch target ≥44×44 declarado y cómo se logra" },
+      { "id": "C23", "grupo": "code", "check": "Snippet HTML/CSS presente y usa exclusivamente tokens" },
+      { "id": "C24", "grupo": "code", "check": "Snippet incluye los atributos ARIA del bloque accessibility" },
+      { "id": "C25", "grupo": "governance", "check": "owner, lastReview y related declarados" }
+    ]
+  },
+
+  "roadmap": [
+    { "fase": 1, "nombre": "Cerrar foundations", "acciones": ["Publicar Motion foundation (durations + easings + patterns)", "Publicar Layout foundation (breakpoints + grid)", "Publicar Interaction States con opacidades canónicas", "Completar pares `on-*` faltantes"] },
+    { "fase": 2, "nombre": "Introducir component tokens", "acciones": ["Definir naming nodo.comp.*", "Generar comp tokens para las 13 categorías empezando por Cards y Controls"] },
+    { "fase": 3, "nombre": "Reescribir el schema de componente", "acciones": ["Migrar los 128 a component.schema.json", "Añadir tabs Anatomy, Behavior y Code", "Sustituir specs plantilladas por specs reales"] },
+    { "fase": 4, "nombre": "Automatizar", "acciones": ["Generador HTML desde JSON", "Validador de checklist en CI", "Extracción de variantCount desde Figma para verificar"] }
+  ]
+}

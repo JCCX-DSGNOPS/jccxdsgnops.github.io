@@ -1,0 +1,257 @@
+{
+  "$schema": "../schema/component.schema.json",
+
+  "identity": {
+    "id": "text-field",
+    "name": "Text Field",
+    "figmaKey": "text-field",
+    "category": "inputs",
+    "status": "stable",
+    "version": "1.0.0",
+    "since": "1.0.0",
+    "owner": "Design Systems Guild",
+    "lastReview": "2026-09-09",
+    "platforms": ["web", "ios", "android", "figma"],
+    "m3Equivalent": "Text fields (filled | outlined)"
+  },
+
+  "purpose": {
+    "summary": "Campo de entrada de una sola línea con etiqueta persistente, validación y mensajería de ayuda o error.",
+    "whenToUse": [
+      "El usuario debe introducir texto libre corto: nombre, email, importe, código.",
+      "El valor requiere validación y comunicación del resultado de esa validación.",
+      "El campo forma parte de un formulario con etiquetas visibles y persistentes."
+    ],
+    "whenNotToUse": [
+      { "case": "El texto puede ocupar varias líneas.", "useInstead": "text-area" },
+      { "case": "El valor procede de un conjunto cerrado de opciones.", "useInstead": "dropdown-input" },
+      { "case": "El valor es un código de verificación de N dígitos.", "useInstead": "input-otp" },
+      { "case": "El campo filtra una colección en tiempo real.", "useInstead": "search" },
+      { "case": "El valor es una fecha.", "useInstead": "date-picker" }
+    ]
+  },
+
+  "anatomy": {
+    "diagram": "assets/anatomy/text-field.svg",
+    "layout": { "direction": "vertical", "align": "stretch", "justify": "start", "wrap": false, "gap": "--spacing1" },
+    "parts": [
+      { "index": 1, "id": "field", "name": "Field container", "required": true, "role": "container", "cardinality": "1", "description": "Superficie del campo. Define fondo, borde, radio y altura. Es la única parte obligatoria junto a input y label.", "contains": ["leading-icon", "input", "trailing-icon"], "style": { "background": "--surface-container-low", "border": "--outline-high", "borderWidth": "1px", "radius": "--radius-small", "paddingInline": "--spacing4", "gap": "--spacing2", "height": "56px" } },
+      { "index": 2, "id": "label", "name": "Label", "required": true, "role": "text", "cardinality": "1", "description": "Etiqueta persistente sobre el campo. Nunca se sustituye por el placeholder.", "style": { "typography": "label/medium", "foreground": "--on-surface-variant", "maxLines": 1 } },
+      { "index": 3, "id": "leading-icon", "name": "Leading icon", "required": false, "role": "icon", "cardinality": "0..1", "description": "Icono contextual al inicio del campo. Decorativo.", "style": { "iconSize": "20px", "foreground": "--on-surface-low" } },
+      { "index": 4, "id": "input", "name": "Input", "required": true, "role": "text", "cardinality": "1", "description": "Zona editable. Contiene el valor o, si está vacío, el placeholder.", "style": { "typography": "body/large", "foreground": "--on-surface", "maxLines": 1 } },
+      { "index": 5, "id": "placeholder", "name": "Placeholder", "required": false, "role": "text", "cardinality": "0..1", "description": "Ejemplo de formato esperado. Desaparece al escribir, por eso nunca sustituye a la etiqueta.", "style": { "typography": "body/large", "foreground": "--on-surface-low" } },
+      { "index": 6, "id": "trailing-icon", "name": "Trailing action", "required": false, "role": "action", "cardinality": "0..1", "description": "Acción del campo: limpiar, mostrar contraseña o indicador de validación.", "style": { "iconSize": "20px", "foreground": "--on-surface-variant" } },
+      { "index": 7, "id": "supporting-text", "name": "Supporting text", "required": false, "role": "text", "cardinality": "0..1", "description": "Mensaje bajo el campo: ayuda de formato o error de validación. El espacio se reserva siempre para evitar layout shift.", "style": { "typography": "body/small", "foreground": "--on-surface-variant", "maxLines": 2 } },
+      { "index": 8, "id": "counter", "name": "Character counter", "required": false, "role": "indicator", "cardinality": "0..1", "description": "Contador actual/máximo, alineado al final de la línea de supporting text.", "style": { "typography": "body/small", "foreground": "--on-surface-low" } }
+    ]
+  },
+
+  "variants": {
+    "axes": [
+      { "id": "type", "label": "Emphasis / type", "values": ["outlined", "filled"], "default": "outlined" },
+      { "id": "size", "label": "Size", "values": ["small", "medium"], "default": "medium" },
+      { "id": "icon", "label": "Icon placement", "values": ["none", "leading", "trailing", "both"], "default": "none" },
+      { "id": "supporting", "label": "Supporting text", "values": ["none", "helper", "counter"], "default": "helper" }
+    ],
+    "named": [
+      { "id": "outlined", "name": "Outlined", "description": "Límite explícito por trazo. Variante por defecto: máxima definición del área editable sobre cualquier fondo.", "emphasis": "high", "overrides": { "field": { "background": "transparent", "border": "--outline-high", "borderWidth": "1px" } } },
+      { "id": "filled", "name": "Filled", "description": "Superficie rellena sin trazo, con línea inferior de estado. Para formularios densos donde múltiples trazos generan ruido.", "emphasis": "medium", "overrides": { "field": { "background": "--surface-container", "border": "none", "radius": "--radius-small" } } }
+    ],
+    "variantCount": 48
+  },
+
+  "specs": {
+    "base": {
+      "field": { "background": "transparent", "border": "--outline-high", "borderWidth": "1px", "radius": "--radius-small", "paddingInline": "--spacing4", "gap": "--spacing2", "height": "56px" },
+      "label": { "typography": "label/medium", "foreground": "--on-surface-variant" },
+      "leading-icon": { "iconSize": "20px", "foreground": "--on-surface-low" },
+      "input": { "typography": "body/large", "foreground": "--on-surface" },
+      "placeholder": { "typography": "body/large", "foreground": "--on-surface-low" },
+      "trailing-icon": { "iconSize": "20px", "foreground": "--on-surface-variant" },
+      "supporting-text": { "typography": "body/small", "foreground": "--on-surface-variant" },
+      "counter": { "typography": "body/small", "foreground": "--on-surface-low" }
+    },
+    "sizes": [
+      { "id": "small", "label": "Small", "overrides": { "field": { "height": "48px", "paddingInline": "--spacing3" }, "input": { "typography": "body/medium" } } },
+      { "id": "medium", "label": "Medium", "overrides": {} }
+    ],
+    "measurements": {
+      "radius": "--radius-small",
+      "padding": { "block": "--none", "inline": "--spacing4" },
+      "gap": "--spacing2",
+      "itemSpacing": "--spacing4",
+      "minTouchTarget": "44x44dp",
+      "alignment": "start",
+      "resolved": { "fieldHeight": "56px", "fieldHeightSmall": "48px", "radius": "8px", "labelGap": "4px", "supportingGap": "4px", "supportingReservedHeight": "16px", "borderWidthRest": "1px", "borderWidthFocus": "2px", "verticalFieldSpacing": "16px" }
+    },
+    "typography": [
+      { "part": "label", "token": "label/medium", "maxLines": 1 },
+      { "part": "input", "token": "body/large", "maxLines": 1 },
+      { "part": "supporting-text", "token": "body/small", "maxLines": 2 }
+    ]
+  },
+
+  "states": {
+    "interactive": true,
+    "interactionModel": "editable",
+    "default": "default",
+    "list": [
+      { "id": "default", "trigger": "Reposo, sin foco y sin valor.", "delta": {} },
+      { "id": "hover", "trigger": "Puntero sobre el campo.", "delta": { "field": { "border": "--outline" } } },
+      { "id": "focused", "trigger": "El input tiene el foco.", "delta": { "field": { "border": "--primary", "borderWidth": "2px", "outline": "none" }, "label": { "foreground": "--primary" } }, "announcement": "Se anuncia la etiqueta, el tipo de campo, el valor actual y el supporting text." },
+      { "id": "filled", "trigger": "El campo tiene valor y no tiene el foco.", "delta": { "input": { "foreground": "--on-surface" }, "placeholder": { "opacity": 0 } } },
+      { "id": "error", "trigger": "La validación ha fallado.", "delta": { "field": { "border": "--error", "borderWidth": "2px" }, "label": { "foreground": "--error" }, "supporting-text": { "foreground": "--error" }, "trailing-icon": { "foreground": "--error" } }, "announcement": "aria-invalid=\"true\" + aria-describedby al mensaje. Se anuncia por live region assertive.", "notes": "El error se comunica SIEMPRE con texto e icono, nunca solo con el color del borde." },
+      { "id": "success", "trigger": "La validación asíncrona ha pasado.", "delta": { "field": { "border": "--success" }, "trailing-icon": { "foreground": "--success" }, "supporting-text": { "foreground": "--on-success-container" } } },
+      { "id": "validating", "trigger": "Validación asíncrona en curso.", "delta": { "trailing-icon": { "foreground": "--on-surface-low" } }, "announcement": "aria-busy=\"true\" en el campo." },
+      { "id": "read-only", "trigger": "El valor se muestra pero no se puede editar.", "delta": { "field": { "background": "--surface-container", "border": "--outline-low" }, "input": { "foreground": "--on-surface-variant" } }, "announcement": "readonly. El campo conserva su tab stop y el valor es seleccionable y copiable." },
+      { "id": "disabled", "trigger": "El campo no está disponible.", "delta": { "field": { "opacity": 0.12, "border": "none", "background": "--on-surface" }, "label": { "opacity": 0.38 }, "input": { "opacity": 0.38 }, "supporting-text": { "opacity": 0.38 } }, "announcement": "aria-disabled=\"true\" con el motivo en texto adyacente.", "notes": "Contenedor 12% / contenido 38%." }
+    ]
+  },
+
+  "behavior": {
+    "interactions": [
+      { "id": "focus", "trigger": "click / Tab sobre el campo", "result": "El borde pasa a 2px --primary y la etiqueta adopta el color primary.", "motion": { "pattern": "none", "duration": "150ms", "easing": "cubic-bezier(0.4, 0, 0.2, 1)", "properties": ["border-color", "border-width", "color"] } },
+      { "id": "validate", "trigger": "blur o submit", "result": "Se evalúa el valor y se muestra el estado error o success con su mensaje.", "motion": { "pattern": "fade", "duration": "150ms", "easing": "cubic-bezier(0, 0, 0.2, 1)", "properties": ["opacity", "color"] } },
+      { "id": "clear", "trigger": "tap sobre la acción trailing de limpiar", "result": "Vacía el valor y devuelve el foco al input.", "motion": { "pattern": "none", "duration": "100ms", "easing": "linear", "properties": ["opacity"] } }
+    ],
+    "gestures": [{ "gesture": "long-press", "action": "Abre el menú nativo de selección y pegado.", "constraint": "No se sobrescribe el comportamiento nativo del sistema." }],
+    "overflow": { "strategy": "scroll", "affordance": "El valor se desplaza horizontalmente dentro del input; nunca se trunca con elipsis mientras el campo tiene el foco." },
+    "reducedMotion": "Las transiciones de borde y color se reducen a 0ms; el cambio de estado es inmediato.",
+    "loading": "Durante la validación asíncrona el input permanece editable y la acción trailing muestra loader_circular en 20px.",
+    "emptyState": "El campo vacío muestra placeholder solo si aporta formato. Un placeholder que repite la etiqueta es un error de contenido."
+  },
+
+  "composition": {
+    "slots": [
+      { "id": "label", "name": "Label", "accepts": ["text"], "cardinality": "1", "required": true, "defaultPart": "label", "constraints": "Sustantivo corto. Persistente: nunca se convierte en placeholder." },
+      { "id": "leading-icon", "name": "Leading icon", "accepts": ["icon"], "cardinality": "0..1", "required": false, "defaultPart": "leading-icon", "constraints": "Decorativo, aria-hidden. No es interactivo." },
+      { "id": "trailing", "name": "Trailing action", "accepts": ["icon", "component"], "allowedComponents": ["close", "loader_circular", "status-indicator"], "cardinality": "0..1", "required": false, "defaultPart": "trailing-icon", "constraints": "Si es interactivo, es su propio tab stop y necesita nombre accesible." },
+      { "id": "supporting", "name": "Supporting text", "accepts": ["text"], "cardinality": "0..1", "required": false, "defaultPart": "supporting-text", "constraints": "El espacio se reserva aunque esté vacío para evitar layout shift al aparecer el error." }
+    ],
+    "props": [
+      { "name": "type", "type": "enum", "enum": ["outlined", "filled"], "default": "outlined" },
+      { "name": "size", "type": "enum", "enum": ["small", "medium"], "default": "medium" },
+      { "name": "label", "type": "string", "default": null, "required": true },
+      { "name": "value", "type": "string", "default": "" },
+      { "name": "placeholder", "type": "string", "default": null },
+      { "name": "supportingText", "type": "string", "default": null },
+      { "name": "errorText", "type": "string", "default": null },
+      { "name": "inputMode", "type": "enum", "enum": ["text", "numeric", "decimal", "tel", "email", "url"], "default": "text" },
+      { "name": "autocomplete", "type": "string", "default": "off" },
+      { "name": "maxLength", "type": "number", "default": null },
+      { "name": "required", "type": "boolean", "default": false },
+      { "name": "readOnly", "type": "boolean", "default": false },
+      { "name": "disabled", "type": "boolean", "default": false }
+    ],
+    "events": [
+      { "name": "input", "payload": "{ value }", "description": "Se dispara en cada pulsación." },
+      { "name": "change", "payload": "{ value }", "description": "Se dispara al confirmar el valor." },
+      { "name": "invalid", "payload": "{ value, reason }", "description": "Se dispara cuando la validación falla." }
+    ],
+    "nestingRules": [
+      "El label siempre se asocia al input con `for`/`id`; nunca se anida el input dentro del label si hay iconos.",
+      "No colocar más de una acción trailing.",
+      "Los campos de un mismo formulario comparten variante y tamaño.",
+      "No usar el placeholder como sustituto de la etiqueta bajo ninguna circunstancia."
+    ]
+  },
+
+  "responsive": {
+    "fluid": true,
+    "breakpoints": [
+      { "id": "compact", "minWidth": "0px", "columns": 1, "behavior": "Ancho completo. Un campo por fila. inputMode adecuado para que el SO muestre el teclado correcto." },
+      { "id": "medium", "minWidth": "600px", "columns": 2, "behavior": "Los campos cortos relacionados (ciudad + código postal) pueden compartir fila con gap --spacing4." },
+      { "id": "expanded", "minWidth": "840px", "columns": 2, "behavior": "maxWidth de 480px por campo para conservar una longitud de línea legible." }
+    ]
+  },
+
+  "guidelines": {
+    "do": [
+      { "rule": "Mantén la etiqueta siempre visible sobre el campo.", "rationale": "Al escribir, un placeholder-etiqueta desaparece y el usuario pierde el contexto." },
+      { "rule": "Reserva el espacio del supporting text aunque esté vacío.", "rationale": "Evita que el formulario salte cuando aparece un error." },
+      { "rule": "Escribe el error diciendo cómo corregirlo, no solo que hay un fallo.", "rationale": "Un error accionable reduce el abandono.", "example": "«El IBAN debe tener 24 caracteres» en lugar de «Campo inválido»." },
+      { "rule": "Declara inputMode y autocomplete acordes al dato.", "rationale": "Habilita el teclado correcto y el autorrelleno del sistema." },
+      { "rule": "Valida al salir del campo (blur), no en cada pulsación.", "rationale": "Validar mientras se escribe marca en rojo un valor que aún se está introduciendo." }
+    ],
+    "dont": [
+      { "rule": "No uses el placeholder como etiqueta.", "rationale": "Desaparece al escribir y no tiene contraste suficiente para ser texto informativo." },
+      { "rule": "No comuniques el error solo con el color del borde.", "rationale": "Falla para daltonismo y para lectores de pantalla." },
+      { "rule": "No deshabilites el botón de envío sin explicar qué falta.", "rationale": "El usuario no sabe qué campo corregir." },
+      { "rule": "No uses text-field para valores de un conjunto cerrado.", "rationale": "Genera errores de escritura evitables.", "example": "Usa dropdown-input." },
+      { "rule": "No apliques maxLength sin contador visible.", "rationale": "El corte silencioso de caracteres se percibe como un fallo de la aplicación." }
+    ],
+    "content": {
+      "rules": [
+        "La etiqueta es un sustantivo corto sin dos puntos.",
+        "El placeholder muestra el formato, no repite la etiqueta.",
+        "El supporting text explica el requisito ANTES de que el usuario falle.",
+        "El error nombra la regla incumplida y la acción correctora.",
+        "Marca los campos opcionales, no los obligatorios, cuando la mayoría son obligatorios."
+      ],
+      "goodExample": "Label: «IBAN» · Placeholder: «ES00 0000 0000 0000 0000 0000» · Helper: «24 caracteres, sin espacios» · Error: «El IBAN debe tener 24 caracteres. Faltan 3.»",
+      "badExample": "Label: (ninguna) · Placeholder: «IBAN» · Error: «Error»",
+      "maxLengths": { "label": 32, "placeholder": 48, "supportingText": 80, "errorText": 96 },
+      "localization": "Prever 35% de expansión en la etiqueta y el supporting text. El supporting text puede ocupar 2 líneas; la etiqueta trunca en 1, así que debe ser corta en el idioma más largo."
+    },
+    "placement": ["Formulario en columna única con separación vertical --spacing4 entre campos.", "El campo con foco inicial es el primero incompleto, no siempre el primero de la lista.", "El botón de envío va después del último campo, nunca flotando sobre él."],
+    "density": "El tier `small` solo dentro de barras, filtros o modales compactos; nunca en formularios de alta."
+  },
+
+  "accessibility": {
+    "role": "textbox",
+    "roleRationale": "Se usa el elemento nativo <input type=\"text\">, que ya expone el rol textbox junto a su valor y estado de validación.",
+    "accessibleName": "Deriva del <label> asociado por for/id. Si el diseño impide una etiqueta visible, se usa aria-label, pero es una excepción que debe justificarse.",
+    "ariaAttributes": [
+      { "attribute": "aria-invalid", "value": "true", "when": "state = error" },
+      { "attribute": "aria-describedby", "value": "id del supporting-text y del counter", "when": "existe supporting text, error o contador" },
+      { "attribute": "aria-required", "value": "true", "when": "el campo es obligatorio" },
+      { "attribute": "aria-busy", "value": "true", "when": "state = validating" },
+      { "attribute": "readonly", "value": "", "when": "state = read-only" }
+    ],
+    "keyboard": [
+      { "key": "Tab", "action": "Enfoca el input. La acción trailing interactiva es un tab stop adicional posterior." },
+      { "key": "Shift + Tab", "action": "Retrocede al campo anterior." },
+      { "key": "Enter", "action": "Envía el formulario si el campo pertenece a uno." },
+      { "key": "Escape", "action": "Limpia el valor cuando el campo expone acción de limpiar." },
+      { "key": "Home / End", "action": "Mueve el cursor al inicio o al final del valor." }
+    ],
+    "tabStops": "1 para el input + 1 por cada acción trailing interactiva. El icono leading nunca es un tab stop.",
+    "focus": { "indicator": "--primary", "width": "2px", "offset": "0px", "trapped": false, "restoreTo": "Tras cerrar un picker o modal lanzado desde el campo, el foco vuelve al input." },
+    "screenReader": [
+      "Al enfocar se anuncia: etiqueta, rol, valor actual, requerido y supporting text.",
+      "El error se anuncia inmediatamente al aparecer mediante role=\"alert\" en el supporting text.",
+      "El contador se anuncia solo al acercarse al límite, no en cada pulsación, para no saturar.",
+      "El icono leading es decorativo y lleva aria-hidden=\"true\"."
+    ],
+    "liveRegion": "El supporting text en estado error se marca con role=\"alert\" para que se anuncie sin necesidad de mover el foco.",
+    "contrast": [
+      { "pair": "--on-surface on --surface", "theme": "light", "ratio": 16.4, "requirement": 4.5, "pass": true },
+      { "pair": "--on-surface-variant on --surface", "theme": "light", "ratio": 5.7, "requirement": 4.5, "pass": true },
+      { "pair": "--on-surface-low on --surface (placeholder)", "theme": "light", "ratio": 2.7, "requirement": 4.5, "pass": false },
+      { "pair": "--outline-high on --surface (borde)", "theme": "light", "ratio": 1.3, "requirement": 3.0, "pass": false },
+      { "pair": "--error on --surface", "theme": "light", "ratio": 4.6, "requirement": 4.5, "pass": true },
+      { "pair": "--on-surface on --surface", "theme": "dark", "ratio": 15.1, "requirement": 4.5, "pass": true }
+    ],
+    "touchTarget": { "min": "44x44dp", "achievedBy": "La altura del campo (56px / 48px) supera el mínimo. La acción trailing alcanza 44dp con padding, sin ampliar el icono de 20px." },
+    "reducedMotion": "Las transiciones de borde pasan a 0ms.",
+    "wcag": ["1.3.1", "1.3.5", "1.4.3", "1.4.11", "2.1.1", "2.4.6", "2.4.7", "2.5.8", "3.3.1", "3.3.2", "3.3.3", "4.1.2"]
+  },
+
+  "code": {
+    "html": "<div class=\"nodo-field\">\n  <label class=\"nodo-field__label\" for=\"iban\">IBAN</label>\n  <div class=\"nodo-field__box\">\n    <svg class=\"nodo-field__icon\" aria-hidden=\"true\" focusable=\"false\" width=\"20\" height=\"20\"><use href=\"#icon-bank\"></use></svg>\n    <input class=\"nodo-field__input\"\n           id=\"iban\"\n           type=\"text\"\n           inputmode=\"text\"\n           autocomplete=\"off\"\n           placeholder=\"ES00 0000 0000 0000 0000 0000\"\n           aria-describedby=\"iban-help\"\n           aria-required=\"true\">\n  </div>\n  <p class=\"nodo-field__supporting\" id=\"iban-help\">24 caracteres, sin espacios</p>\n</div>\n\n<!-- Estado error: aria-invalid + role=\"alert\" en el mensaje -->\n<!-- <input ... aria-invalid=\"true\" aria-describedby=\"iban-help\"> -->\n<!-- <p class=\"nodo-field__supporting\" id=\"iban-help\" role=\"alert\">El IBAN debe tener 24 caracteres. Faltan 3.</p> -->",
+    "css": ".nodo-field { display: flex; flex-direction: column; gap: var(--spacing1); }\n\n.nodo-field__label {\n  font-size: 12px; line-height: 16px; font-weight: 600;\n  color: var(--on-surface-variant);\n}\n\n.nodo-field__box {\n  display: flex; align-items: center; gap: var(--spacing2);\n  height: 56px;\n  padding-inline: var(--spacing4);\n  border: 1px solid var(--outline-high);\n  border-radius: var(--radius-small);\n  background: transparent;\n  transition: border-color var(--transition-fast), border-width var(--transition-fast);\n}\n.nodo-field__box:hover { border-color: var(--outline); }\n.nodo-field__box:focus-within {\n  border-color: var(--primary);\n  border-width: 2px;\n  padding-inline: calc(var(--spacing4) - 1px); /* compensa el borde para no mover el contenido */\n}\n\n.nodo-field__input {\n  flex: 1; min-width: 0;\n  border: none; outline: none; background: transparent;\n  font-family: inherit; font-size: 16px; line-height: 24px;\n  color: var(--on-surface);\n}\n.nodo-field__input::placeholder { color: var(--on-surface-low); }\n\n.nodo-field__icon { flex: none; color: var(--on-surface-low); }\n\n.nodo-field__supporting {\n  margin: 0;\n  min-height: 16px; /* espacio reservado: evita layout shift al aparecer el error */\n  font-size: 12px; line-height: 16px;\n  color: var(--on-surface-variant);\n}\n\n/* Estados */\n.nodo-field:has(:invalid:not(:placeholder-shown)) .nodo-field__box,\n.nodo-field:has([aria-invalid=\"true\"]) .nodo-field__box { border-color: var(--error); border-width: 2px; }\n.nodo-field:has([aria-invalid=\"true\"]) .nodo-field__label,\n.nodo-field:has([aria-invalid=\"true\"]) .nodo-field__supporting { color: var(--error); }\n\n.nodo-field:has(:read-only) .nodo-field__box { background: var(--surface-container); border-color: var(--outline-low); }\n.nodo-field:has(:disabled) .nodo-field__box { border-color: transparent; background: color-mix(in srgb, var(--on-surface) 12%, transparent); }\n.nodo-field:has(:disabled) .nodo-field__label,\n.nodo-field:has(:disabled) .nodo-field__supporting { color: color-mix(in srgb, var(--on-surface) 38%, transparent); }\n\n/* Variante filled */\n.nodo-field--filled .nodo-field__box { background: var(--surface-container); border-color: transparent; }\n\n/* Tamaño small */\n.nodo-field--small .nodo-field__box { height: 48px; padding-inline: var(--spacing3); }\n.nodo-field--small .nodo-field__input { font-size: 14px; line-height: 20px; }\n\n@media (prefers-reduced-motion: reduce) {\n  .nodo-field__box { transition: none; }\n}",
+    "usage": "<form style=\"display:flex; flex-direction:column; gap: var(--spacing4); max-width: 480px;\">\n  <!-- nodo-field ... -->\n  <!-- nodo-field ... -->\n  <button class=\"nodo-btn nodo-btn--filled nodo-btn--medium\" type=\"submit\">\n    <span class=\"nodo-btn__state-layer\" aria-hidden=\"true\"></span>\n    <span class=\"nodo-btn__label\">Continuar</span>\n  </button>\n</form>",
+    "cssVariables": ["--nodo-field-height", "--nodo-field-radius", "--nodo-field-padding-inline"]
+  },
+
+  "related": {
+    "composedOf": ["close", "loader_circular", "status-indicator"],
+    "usedIn": ["template-modal", "template-invoice", "authenticator"],
+    "alternatives": ["text-area", "text-field-float", "dropdown-input", "search", "input-otp", "date-picker"],
+    "patterns": ["Checkout", "Verification"]
+  },
+
+  "changelog": [
+    { "version": "1.0.0", "date": "2026-09-09", "change": "Especificación completa: anatomía de 8 partes, 9 estados con deltas, contrato de validación y mensajería accesible.", "breaking": false }
+  ]
+}

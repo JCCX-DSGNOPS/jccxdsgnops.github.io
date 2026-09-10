@@ -1,0 +1,420 @@
+{
+  "$schema": "../schema/component.schema.json",
+
+  "identity": {
+    "id": "button",
+    "name": "Button",
+    "figmaKey": "button",
+    "category": "controls",
+    "status": "stable",
+    "version": "1.0.0",
+    "since": "1.0.0",
+    "owner": "Design Systems Guild",
+    "lastReview": "2026-09-09",
+    "platforms": ["web", "ios", "android", "figma"],
+    "m3Equivalent": "Common buttons (elevated | filled | filled tonal | outlined | text)"
+  },
+
+  "purpose": {
+    "summary": "Control que ejecuta una acción concreta e inmediata sobre la tarea en curso.",
+    "description": "Button es el primitivo de acción del sistema. Su variante determina el énfasis relativo dentro de la jerarquía de la pantalla: exactamente un botón `filled` visible por vista establece la acción principal, y el resto de acciones descienden a `tonal`, `outlined` o `text`.",
+    "whenToUse": [
+      "El usuario debe ejecutar una acción que modifica el estado del sistema o avanza el flujo.",
+      "La acción tiene un resultado nombrable en un verbo imperativo.",
+      "La acción vive dentro de un formulario, una barra, una card o una fila de lista."
+    ],
+    "whenNotToUse": [
+      { "case": "La acción navega a otra pantalla sin modificar estado y debe verse como enlace.", "useInstead": "text-link" },
+      { "case": "Se necesitan dos acciones equilibradas ancladas al pie de la pantalla.", "useInstead": "docked-buttons" },
+      { "case": "La acción es un filtro o una selección múltiple.", "useInstead": "chip" },
+      { "case": "La acción es única, iconográfica y global (cerrar, volver, menú).", "useInstead": "close" },
+      { "case": "La acción requiere una espera obligatoria antes de habilitarse.", "useInstead": "timed-button" }
+    ]
+  },
+
+  "anatomy": {
+    "diagram": "assets/anatomy/button.svg",
+    "layout": { "direction": "horizontal", "align": "center", "justify": "center", "wrap": false, "gap": "--spacing2" },
+    "parts": [
+      {
+        "index": 1,
+        "id": "container",
+        "name": "Container",
+        "required": true,
+        "role": "container",
+        "cardinality": "1",
+        "description": "Superficie táctil que define fondo, borde, radio y altura. Única parte obligatoria.",
+        "contains": ["state-layer", "leading-icon", "label", "trailing-icon"],
+        "style": {
+          "background": "--primary",
+          "radius": "--radius-small",
+          "paddingInline": "--spacing6",
+          "gap": "--spacing2",
+          "height": "48px",
+          "minHeight": "44px"
+        }
+      },
+      {
+        "index": 2,
+        "id": "state-layer",
+        "name": "State layer",
+        "required": true,
+        "role": "decoration",
+        "cardinality": "1",
+        "description": "Capa de color sobre el container que expresa hover, focus y pressed. Su color es siempre el foreground de la variante.",
+        "style": { "background": "--on-primary", "opacity": 0, "radius": "--radius-small" }
+      },
+      {
+        "index": 3,
+        "id": "leading-icon",
+        "name": "Leading icon",
+        "required": false,
+        "role": "icon",
+        "cardinality": "0..1",
+        "description": "Icono que precede a la etiqueta y refuerza el significado de la acción. Nunca sustituye a la etiqueta.",
+        "style": { "iconSize": "20px", "foreground": "--on-primary" }
+      },
+      {
+        "index": 4,
+        "id": "label",
+        "name": "Label",
+        "required": true,
+        "role": "text",
+        "cardinality": "1",
+        "description": "Verbo imperativo que nombra el resultado de la acción. Es el nombre accesible del botón.",
+        "style": { "typography": "label/large", "foreground": "--on-primary", "maxLines": 1, "textAlign": "center" }
+      },
+      {
+        "index": 5,
+        "id": "trailing-icon",
+        "name": "Trailing icon",
+        "required": false,
+        "role": "icon",
+        "cardinality": "0..1",
+        "description": "Icono posterior a la etiqueta. Reservado para indicar dirección (chevron) o apertura de menú.",
+        "style": { "iconSize": "20px", "foreground": "--on-primary" }
+      },
+      {
+        "index": 6,
+        "id": "loader",
+        "name": "Loader",
+        "required": false,
+        "role": "indicator",
+        "cardinality": "0..1",
+        "description": "Indicador circular que sustituye a los iconos mientras la acción está en curso. La etiqueta permanece para conservar el ancho.",
+        "style": { "iconSize": "20px", "foreground": "--on-primary" }
+      }
+    ]
+  },
+
+  "variants": {
+    "axes": [
+      { "id": "type", "label": "Emphasis / type", "values": ["filled", "tonal", "outlined", "text"], "default": "filled" },
+      { "id": "size", "label": "Size", "values": ["xSmall", "small", "medium", "large", "xLarge"], "default": "medium" },
+      { "id": "color", "label": "Color role", "values": ["primary", "error", "neutral"], "default": "primary" },
+      { "id": "icon", "label": "Icon placement", "values": ["none", "leading", "trailing", "both"], "default": "none" },
+      { "id": "width", "label": "Width", "values": ["hug", "fill"], "default": "hug" }
+    ],
+    "named": [
+      {
+        "id": "filled",
+        "name": "Filled",
+        "description": "Máximo énfasis. La acción principal de la pantalla. Exactamente una instancia visible por vista.",
+        "emphasis": "highest",
+        "overrides": {
+          "container": { "background": "--primary", "border": "none" },
+          "label": { "foreground": "--on-primary" },
+          "leading-icon": { "foreground": "--on-primary" },
+          "trailing-icon": { "foreground": "--on-primary" },
+          "state-layer": { "background": "--on-primary" }
+        }
+      },
+      {
+        "id": "tonal",
+        "name": "Tonal",
+        "description": "Énfasis alto sin el peso del filled. Para la acción secundaria de un par, o para la principal dentro de una superficie que ya compite visualmente.",
+        "emphasis": "high",
+        "overrides": {
+          "container": { "background": "--primary-container", "border": "none" },
+          "label": { "foreground": "--on-primary-container" },
+          "leading-icon": { "foreground": "--on-primary-container" },
+          "trailing-icon": { "foreground": "--on-primary-container" },
+          "state-layer": { "background": "--on-primary-container" }
+        }
+      },
+      {
+        "id": "outlined",
+        "name": "Outlined",
+        "description": "Énfasis medio con límite explícito. Acciones alternativas o destructivas confirmables.",
+        "emphasis": "medium",
+        "overrides": {
+          "container": { "background": "transparent", "border": "--outline", "borderWidth": "1px" },
+          "label": { "foreground": "--primary" },
+          "leading-icon": { "foreground": "--primary" },
+          "trailing-icon": { "foreground": "--primary" },
+          "state-layer": { "background": "--primary" }
+        }
+      },
+      {
+        "id": "text",
+        "name": "Text",
+        "description": "Mínimo énfasis. Acciones terciarias, descartes y enlaces de acción dentro de bloques densos.",
+        "emphasis": "lowest",
+        "overrides": {
+          "container": { "background": "transparent", "border": "none", "paddingInline": "--spacing3" },
+          "label": { "foreground": "--primary" },
+          "leading-icon": { "foreground": "--primary" },
+          "trailing-icon": { "foreground": "--primary" },
+          "state-layer": { "background": "--primary" }
+        }
+      }
+    ],
+    "variantCount": 480
+  },
+
+  "specs": {
+    "base": {
+      "container": { "background": "--primary", "radius": "--radius-small", "paddingInline": "--spacing6", "gap": "--spacing2", "height": "48px", "minHeight": "44px" },
+      "state-layer": { "background": "--on-primary", "opacity": 0 },
+      "leading-icon": { "iconSize": "20px", "foreground": "--on-primary" },
+      "label": { "typography": "label/large", "foreground": "--on-primary", "maxLines": 1 },
+      "trailing-icon": { "iconSize": "20px", "foreground": "--on-primary" },
+      "loader": { "iconSize": "20px", "foreground": "--on-primary" }
+    },
+    "sizes": [
+      { "id": "xSmall", "label": "xSmall", "overrides": { "container": { "height": "32px", "paddingInline": "--spacing3", "gap": "--spacing1", "radius": "--radius-xSmall" }, "label": { "typography": "label/small" }, "leading-icon": { "iconSize": "16px" }, "trailing-icon": { "iconSize": "16px" } } },
+      { "id": "small", "label": "Small", "overrides": { "container": { "height": "40px", "paddingInline": "--spacing4", "gap": "--spacing2" }, "label": { "typography": "label/medium" }, "leading-icon": { "iconSize": "18px" }, "trailing-icon": { "iconSize": "18px" } } },
+      { "id": "medium", "label": "Medium", "overrides": {} },
+      { "id": "large", "label": "Large", "overrides": { "container": { "height": "56px", "paddingInline": "--spacing8" }, "label": { "typography": "label/large" }, "leading-icon": { "iconSize": "24px" }, "trailing-icon": { "iconSize": "24px" } } },
+      { "id": "xLarge", "label": "xLarge", "overrides": { "container": { "height": "64px", "paddingInline": "--spacing10", "radius": "--radius-medium" }, "label": { "typography": "title/medium" }, "leading-icon": { "iconSize": "24px" }, "trailing-icon": { "iconSize": "24px" } } }
+    ],
+    "measurements": {
+      "radius": "--radius-small",
+      "padding": { "block": "--none", "inline": "--spacing6" },
+      "gap": "--spacing2",
+      "itemSpacing": "--spacing2",
+      "minTouchTarget": "44x44dp",
+      "alignment": "center",
+      "resolved": {
+        "heightXSmall": "32px",
+        "heightSmall": "40px",
+        "heightMedium": "48px",
+        "heightLarge": "56px",
+        "heightXLarge": "64px",
+        "radius": "8px",
+        "iconLabelGap": "8px",
+        "minWidth": "64px",
+        "groupSpacing": "8px"
+      }
+    },
+    "typography": [{ "part": "label", "token": "label/large", "maxLines": 1 }]
+  },
+
+  "states": {
+    "interactive": true,
+    "interactionModel": "activatable",
+    "default": "default",
+    "list": [
+      { "id": "default", "trigger": "Reposo, acción disponible.", "delta": {} },
+      {
+        "id": "hover",
+        "trigger": "Puntero sobre el container.",
+        "delta": { "state-layer": { "opacity": 0.08 } }
+      },
+      {
+        "id": "focus-visible",
+        "trigger": "El container recibe foco por teclado.",
+        "delta": {
+          "state-layer": { "opacity": 0.1 },
+          "container": { "outline": "--nodo-primary-light", "outlineWidth": "2px", "outlineOffset": "2px" }
+        },
+        "announcement": "Se anuncia la etiqueta seguida de «botón»."
+      },
+      {
+        "id": "pressed",
+        "trigger": "pointerdown o Enter/Space mantenidos.",
+        "delta": { "state-layer": { "opacity": 0.1 }, "container": { "transform": "scale(0.98)" } }
+      },
+      {
+        "id": "disabled",
+        "trigger": "La acción no está disponible en este momento.",
+        "delta": {
+          "container": { "background": "--on-surface", "opacity": 0.12, "border": "none" },
+          "label": { "foreground": "--on-surface", "opacity": 0.38 },
+          "leading-icon": { "opacity": 0.38 },
+          "trailing-icon": { "opacity": 0.38 }
+        },
+        "announcement": "aria-disabled=\"true\". El motivo se expone en texto adyacente permanente, nunca en un tooltip de hover.",
+        "notes": "Contenedor 12% / contenido 38%. El botón conserva su tab stop con aria-disabled para que el lector pueda descubrir el motivo."
+      },
+      {
+        "id": "loading",
+        "trigger": "La acción está en curso.",
+        "delta": {
+          "loader": { "opacity": 1 },
+          "leading-icon": { "opacity": 0 },
+          "trailing-icon": { "opacity": 0 },
+          "container": { "width": "locked" }
+        },
+        "announcement": "aria-busy=\"true\". Al completarse, el resultado se anuncia por live region.",
+        "notes": "El ancho se congela al valor previo para evitar layout shift."
+      },
+      {
+        "id": "error",
+        "trigger": "La acción falló y el botón ofrece reintento.",
+        "delta": {
+          "container": { "background": "--error" },
+          "label": { "foreground": "--on-error" },
+          "state-layer": { "background": "--on-error" }
+        },
+        "announcement": "El error se anuncia por live region assertive; el color nunca es el único indicador."
+      }
+    ]
+  },
+
+  "behavior": {
+    "interactions": [
+      { "id": "activate", "trigger": "tap / click / Enter / Space", "result": "Ejecuta la acción asociada.", "motion": { "pattern": "none", "duration": "100ms", "easing": "cubic-bezier(0.4, 0, 1, 1)", "properties": ["transform", "background-color"] } },
+      { "id": "state-layer-in", "trigger": "pointerenter / focus", "result": "Aparece el state layer.", "motion": { "pattern": "none", "duration": "150ms", "easing": "cubic-bezier(0.4, 0, 0.2, 1)", "properties": ["opacity"] } },
+      { "id": "to-loading", "trigger": "activate en acción asíncrona", "result": "El icono se sustituye por el loader manteniendo el ancho.", "motion": { "pattern": "fade", "duration": "150ms", "easing": "cubic-bezier(0.4, 0, 0.2, 1)", "properties": ["opacity"] } }
+    ],
+    "gestures": [{ "gesture": "long-press", "action": "Sin efecto por defecto.", "constraint": "El botón no soporta acciones secundarias por long-press; usar menu para acciones adicionales." }],
+    "overflow": { "strategy": "none", "affordance": "La etiqueta nunca se trunca. Si no cabe, se acorta el texto o se cambia el tamaño del botón, nunca se pone elipsis." },
+    "reducedMotion": "Se elimina el scale del pressed; el state layer conserva la transición de opacidad.",
+    "loading": "Un solo disparo: el botón se bloquea al primer activate para impedir doble envío hasta que se resuelva la acción.",
+    "emptyState": "No aplica."
+  },
+
+  "composition": {
+    "slots": [
+      { "id": "leading-icon", "name": "Leading icon", "accepts": ["icon"], "cardinality": "0..1", "required": false, "defaultPart": "leading-icon", "constraints": "Icono del set NODO en el tamaño del tier. Sin color propio: hereda el foreground de la variante." },
+      { "id": "label", "name": "Label", "accepts": ["text"], "cardinality": "1", "required": true, "defaultPart": "label", "constraints": "Texto plano, una línea, verbo imperativo." },
+      { "id": "trailing-icon", "name": "Trailing icon", "accepts": ["icon"], "cardinality": "0..1", "required": false, "defaultPart": "trailing-icon", "constraints": "Solo chevron o indicador de menú." }
+    ],
+    "props": [
+      { "name": "type", "type": "enum", "enum": ["filled", "tonal", "outlined", "text"], "default": "filled", "required": false },
+      { "name": "size", "type": "enum", "enum": ["xSmall", "small", "medium", "large", "xLarge"], "default": "medium" },
+      { "name": "color", "type": "enum", "enum": ["primary", "error", "neutral"], "default": "primary" },
+      { "name": "width", "type": "enum", "enum": ["hug", "fill"], "default": "hug" },
+      { "name": "label", "type": "string", "default": null, "required": true },
+      { "name": "leadingIcon", "type": "string", "default": null },
+      { "name": "trailingIcon", "type": "string", "default": null },
+      { "name": "disabled", "type": "boolean", "default": false },
+      { "name": "loading", "type": "boolean", "default": false },
+      { "name": "type_html", "type": "enum", "enum": ["button", "submit", "reset"], "default": "button" }
+    ],
+    "events": [{ "name": "activate", "payload": "{ nativeEvent }", "description": "Se dispara con puntero o teclado. Se suprime en disabled y loading." }],
+    "nestingRules": [
+      "Nunca colocar un botón dentro de otro elemento enfocable.",
+      "Máximo un botón `filled` visible por vista o por grupo de acciones.",
+      "En un par de acciones, la principal va a la derecha en escritorio y abajo en móvil vertical.",
+      "No usar Button dentro de una card navegable: o la card es el destino, o el botón es la acción."
+    ]
+  },
+
+  "responsive": {
+    "fluid": false,
+    "breakpoints": [
+      { "id": "compact", "minWidth": "0px", "behavior": "Los botones anclados al pie usan width=fill. Un par de acciones se apila en vertical con la principal arriba y separación --spacing2." },
+      { "id": "medium", "minWidth": "600px", "behavior": "Los pares vuelven a fila horizontal alineada al final, con la principal a la derecha." },
+      { "id": "expanded", "minWidth": "840px", "behavior": "width=hug por defecto; se conserva el min-width de 64px." }
+    ]
+  },
+
+  "guidelines": {
+    "do": [
+      { "rule": "Usa un verbo imperativo que nombre el resultado exacto.", "rationale": "El usuario debe poder predecir qué pasa sin leer el contexto.", "example": "«Enviar transferencia», «Añadir tarjeta»." },
+      { "rule": "Mantén exactamente un botón filled visible por vista.", "rationale": "El énfasis máximo solo significa algo si es único." },
+      { "rule": "Cuando deshabilites un botón, explica el motivo en texto visible adyacente.", "rationale": "Un botón deshabilitado sin explicación es un callejón sin salida." },
+      { "rule": "Bloquea el botón durante la acción asíncrona y muestra el loader.", "rationale": "Evita el doble envío en operaciones no idempotentes." },
+      { "rule": "Reutiliza la matriz de variantes existente antes de pedir una combinación nueva.", "rationale": "Cada variante nueva es deuda de mantenimiento en 4 plataformas." }
+    ],
+    "dont": [
+      { "rule": "No uses etiquetas genéricas como «OK», «Aceptar» o «Enviar» cuando el resultado se puede nombrar.", "rationale": "Obliga al usuario a reconstruir el contexto." },
+      { "rule": "No pongas dos botones filled juntos.", "rationale": "Anula la jerarquía y aumenta el error de toque." },
+      { "rule": "No uses un botón para navegar sin cambiar estado.", "rationale": "Rompe la expectativa de «atrás» del navegador y de los lectores de pantalla.", "example": "Usa un enlace." },
+      { "rule": "No sustituyas la etiqueta por un icono solo.", "rationale": "Un botón sin etiqueta no tiene nombre accesible fiable.", "example": "Para acciones iconográficas usa close, back o menu." },
+      { "rule": "No trunques la etiqueta con elipsis.", "rationale": "Una acción a medio nombrar no es accionable." }
+    ],
+    "content": {
+      "rules": [
+        "Verbo imperativo en primera posición.",
+        "Máximo 3 palabras; 1 línea siempre.",
+        "Sin punto final.",
+        "Capitalización de frase (solo la primera letra en mayúscula), salvo nombres propios.",
+        "No repetir el contexto que ya aporta el encabezado de la pantalla."
+      ],
+      "goodExample": "«Confirmar pago» · «Añadir tarjeta» · «Descargar recibo»",
+      "badExample": "«Haz clic aquí para confirmar el pago de tu operación» · «OK» · «Enviar.»",
+      "maxLengths": { "label": 24 },
+      "localization": "Prever 35% de expansión. En idiomas largos se baja de tamaño antes que truncar; nunca abreviar el verbo."
+    },
+    "placement": [
+      "Inline en formularios: alineado al inicio del campo al que pertenece.",
+      "Anclado al pie: width=fill en compact, hug alineado al final en medium+.",
+      "Dentro de card: en el área de acciones, alineado al final, máximo 2.",
+      "Grupo de botones: separación --spacing2, alineados sobre la misma línea base."
+    ],
+    "density": "Los tiers xSmall y small solo se usan dentro de contenedores densos (filas de lista, toolbars, chips de acción), nunca como acción principal de pantalla."
+  },
+
+  "accessibility": {
+    "role": "button",
+    "roleRationale": "Se usa el elemento nativo <button>. Solo se recurre a role=\"button\" cuando el elemento no puede ser un botón nativo, y entonces hay que añadir tabindex=\"0\" y el manejo de Enter/Space manualmente.",
+    "accessibleName": "Deriva del contenido textual de la etiqueta. Si se añade un icono, este es decorativo (aria-hidden) y no contribuye al nombre.",
+    "ariaAttributes": [
+      { "attribute": "aria-disabled", "value": "true", "when": "state = disabled y se quiere conservar el foco para explicar el motivo" },
+      { "attribute": "aria-busy", "value": "true", "when": "state = loading" },
+      { "attribute": "aria-expanded", "value": "true | false", "when": "el botón abre un menú o un panel" },
+      { "attribute": "aria-controls", "value": "id del elemento controlado", "when": "el botón abre un menú o un panel" },
+      { "attribute": "aria-describedby", "value": "id del texto que explica el bloqueo", "when": "state = disabled" }
+    ],
+    "keyboard": [
+      { "key": "Tab", "action": "Enfoca el botón. Un solo tab stop." },
+      { "key": "Enter", "action": "Activa la acción." },
+      { "key": "Space", "action": "Activa la acción al soltar." },
+      { "key": "Escape", "action": "Cierra el menú o panel asociado si el botón lo abrió." }
+    ],
+    "tabStops": "1. Un botón disabled con el atributo nativo `disabled` sale del orden de tabulación; con aria-disabled lo conserva.",
+    "focus": { "indicator": "--nodo-primary-light", "width": "2px", "offset": "2px", "trapped": false, "restoreTo": "Al cerrar un diálogo abierto por el botón, el foco vuelve al propio botón." },
+    "screenReader": [
+      "Se anuncia «etiqueta, botón».",
+      "Los iconos llevan aria-hidden=\"true\" y no se anuncian.",
+      "El paso a loading se anuncia por live region polite; el resultado (éxito o error) por assertive.",
+      "El estado de error nunca se comunica solo por el cambio de color del container."
+    ],
+    "liveRegion": "El contenedor del formulario expone una live region polite donde se anuncia el resultado de la acción.",
+    "contrast": [
+      { "pair": "--on-primary on --primary", "theme": "light", "ratio": 10.4, "requirement": 4.5, "pass": true },
+      { "pair": "--on-primary-container on --primary-container", "theme": "light", "ratio": 8.9, "requirement": 4.5, "pass": true },
+      { "pair": "--primary on --surface", "theme": "light", "ratio": 10.9, "requirement": 4.5, "pass": true },
+      { "pair": "--outline on --surface", "theme": "light", "ratio": 2.6, "requirement": 3.0, "pass": false },
+      { "pair": "--on-primary on --primary", "theme": "dark", "ratio": 4.8, "requirement": 4.5, "pass": true },
+      { "pair": "--primary on --surface", "theme": "dark", "ratio": 5.1, "requirement": 4.5, "pass": true }
+    ],
+    "touchTarget": {
+      "min": "44x44dp",
+      "achievedBy": "Los tiers xSmall (32px) y small (40px) alcanzan el mínimo con un pseudo-elemento ::before que expande el área táctil sin alterar el tamaño visual ni el layout."
+    },
+    "reducedMotion": "Se elimina el scale del pressed; el state layer conserva su transición de opacidad.",
+    "wcag": ["1.4.3", "1.4.11", "2.1.1", "2.4.7", "2.5.5", "2.5.8", "3.2.4", "4.1.2"]
+  },
+
+  "code": {
+    "html": "<button class=\"nodo-btn nodo-btn--filled nodo-btn--medium\" type=\"button\">\n  <span class=\"nodo-btn__state-layer\" aria-hidden=\"true\"></span>\n  <svg class=\"nodo-btn__icon\" aria-hidden=\"true\" focusable=\"false\" width=\"20\" height=\"20\"><use href=\"#icon-send\"></use></svg>\n  <span class=\"nodo-btn__label\">Confirmar pago</span>\n</button>",
+    "css": ".nodo-btn {\n  position: relative;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: var(--spacing2);\n  min-width: 64px;\n  height: 48px;\n  padding-inline: var(--spacing6);\n  border: none;\n  border-radius: var(--radius-small);\n  font-family: inherit;\n  font-size: 14px; line-height: 20px; font-weight: 600;\n  cursor: pointer;\n  isolation: isolate;\n  transition: transform 100ms cubic-bezier(0.4, 0, 1, 1);\n}\n.nodo-btn::before { /* área táctil mínima 44dp sin alterar el layout */\n  content: \"\"; position: absolute; inset: 50% auto auto 50%;\n  width: 100%; height: 100%; min-width: 44px; min-height: 44px;\n  transform: translate(-50%, -50%);\n}\n.nodo-btn__state-layer {\n  position: absolute; inset: 0; z-index: 0;\n  border-radius: inherit; opacity: 0;\n  transition: opacity var(--transition-fast);\n  pointer-events: none;\n}\n.nodo-btn > :not(.nodo-btn__state-layer) { position: relative; z-index: 1; }\n\n/* Variantes */\n.nodo-btn--filled   { background: var(--primary); color: var(--on-primary); }\n.nodo-btn--filled   .nodo-btn__state-layer { background: var(--on-primary); }\n.nodo-btn--tonal    { background: var(--primary-container); color: var(--on-primary-container); }\n.nodo-btn--tonal    .nodo-btn__state-layer { background: var(--on-primary-container); }\n.nodo-btn--outlined { background: transparent; color: var(--primary); border: 1px solid var(--outline); }\n.nodo-btn--outlined .nodo-btn__state-layer { background: var(--primary); }\n.nodo-btn--text     { background: transparent; color: var(--primary); padding-inline: var(--spacing3); }\n.nodo-btn--text     .nodo-btn__state-layer { background: var(--primary); }\n\n/* Tamaños */\n.nodo-btn--xsmall { height: 32px; padding-inline: var(--spacing3); gap: var(--spacing1); border-radius: var(--radius-xSmall); font-size: 11px; line-height: 16px; }\n.nodo-btn--small  { height: 40px; padding-inline: var(--spacing4); font-size: 12px; line-height: 16px; }\n.nodo-btn--medium { height: 48px; }\n.nodo-btn--large  { height: 56px; padding-inline: var(--spacing8); }\n.nodo-btn--xlarge { height: 64px; padding-inline: var(--spacing10); border-radius: var(--radius-medium); font-size: 16px; line-height: 24px; }\n\n/* Estados */\n.nodo-btn:hover  .nodo-btn__state-layer { opacity: 0.08; }\n.nodo-btn:focus-visible { outline: 2px solid var(--nodo-primary-light); outline-offset: 2px; }\n.nodo-btn:focus-visible .nodo-btn__state-layer { opacity: 0.10; }\n.nodo-btn:active .nodo-btn__state-layer { opacity: 0.10; }\n.nodo-btn:active { transform: scale(0.98); }\n\n.nodo-btn:disabled,\n.nodo-btn[aria-disabled=\"true\"] {\n  cursor: not-allowed;\n  background: color-mix(in srgb, var(--on-surface) 12%, transparent);\n  border-color: transparent;\n  color: color-mix(in srgb, var(--on-surface) 38%, transparent);\n}\n.nodo-btn:disabled .nodo-btn__state-layer { opacity: 0; }\n\n.nodo-btn[aria-busy=\"true\"] { pointer-events: none; }\n.nodo-btn[aria-busy=\"true\"] .nodo-btn__icon { opacity: 0; }\n\n.nodo-btn--error { background: var(--error); color: var(--on-error); }\n.nodo-btn--fill  { width: 100%; }\n\n@media (prefers-reduced-motion: reduce) {\n  .nodo-btn:active { transform: none; }\n}",
+    "usage": "<!-- Par de acciones: una sola filled -->\n<div style=\"display:flex; gap: var(--spacing2); justify-content: flex-end;\">\n  <button class=\"nodo-btn nodo-btn--text nodo-btn--medium\" type=\"button\">\n    <span class=\"nodo-btn__state-layer\" aria-hidden=\"true\"></span>\n    <span class=\"nodo-btn__label\">Cancelar</span>\n  </button>\n  <button class=\"nodo-btn nodo-btn--filled nodo-btn--medium\" type=\"submit\">\n    <span class=\"nodo-btn__state-layer\" aria-hidden=\"true\"></span>\n    <span class=\"nodo-btn__label\">Confirmar pago</span>\n  </button>\n</div>",
+    "cssVariables": ["--nodo-btn-height", "--nodo-btn-radius", "--nodo-btn-padding-inline", "--nodo-btn-gap"]
+  },
+
+  "related": {
+    "composedOf": [],
+    "usedIn": ["card/medium", "card-complex", "docked-buttons", "double-buttons", "banner", "template-modal", "empty-error-state"],
+    "alternatives": ["chip", "close", "back", "menu", "timed-button", "docked-buttons"],
+    "patterns": ["Checkout", "Empty / error recovery"]
+  },
+
+  "changelog": [
+    { "version": "1.0.0", "date": "2026-09-09", "change": "Especificación completa: 4 variantes nombradas, 5 tiers, deltas de estado con state layers y matriz de variantes verificable (4×5×3×4×2 = 480).", "breaking": false }
+  ]
+}
