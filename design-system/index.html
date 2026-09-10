@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NODO Design System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --nodo-primary: #0039a6;
+            --surface: #fffbfe;
+            --surface-container: #f3eef7;
+            --on-surface: #1c1b1f;
+            --outline-low: #e7e0ec;
+            --spacing4: 16px;
+            --spacing6: 24px;
+            --radius-md: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--surface);
+            color: var(--on-surface);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--nodo-primary), #1e5fd8);
+            color: white;
+            padding: 60px var(--spacing6);
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: var(--spacing4);
+        }
+
+        header p {
+            font-size: 18px;
+            opacity: 0.95;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing6);
+        }
+
+        section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--spacing4);
+            border-bottom: 2px solid var(--nodo-primary);
+            padding-bottom: var(--spacing3);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing6);
+            margin-bottom: var(--spacing6);
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--outline-low);
+            border-radius: var(--radius-md);
+            padding: var(--spacing6);
+            transition: 200ms ease-out;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0, 57, 166, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: var(--spacing2);
+            color: var(--nodo-primary);
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: var(--spacing4);
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e8f0ff;
+            color: var(--nodo-primary);
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: var(--spacing4);
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--nodo-primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 200ms;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #1e5fd8;
+        }
+
+        .btn.secondary {
+            background: transparent;
+            color: var(--nodo-primary);
+            border: 2px solid var(--nodo-primary);
+        }
+
+        .btn.secondary:hover {
+            background: #f0f6ff;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--spacing4);
+            margin-bottom: var(--spacing6);
+        }
+
+        .stat-box {
+            background: var(--surface-container);
+            padding: var(--spacing4);
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .stat-box .number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--nodo-primary);
+        }
+
+        .stat-box .label {
+            font-size: 12px;
+            color: #999;
+            margin-top: var(--spacing2);
+            text-transform: uppercase;
+        }
+
+        .cta {
+            background: #f0f6ff;
+            border-left: 4px solid var(--nodo-primary);
+            padding: var(--spacing6);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing6);
+        }
+
+        .cta h3 {
+            margin-bottom: var(--spacing2);
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: "Monaco", monospace;
+            font-size: 13px;
+        }
+
+        ul {
+            padding-left: var(--spacing6);
+        }
+
+        li {
+            margin-bottom: var(--spacing2);
+        }
+
+        footer {
+            background: var(--surface-container);
+            padding: var(--spacing6);
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎨 NODO Design System</h1>
+        <p>Material Design 3 • 10 Critical Components • Complete Specifications</p>
+    </header>
+
+    <main>
+        <!-- Stats -->
+        <section>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="number">10</div>
+                    <div class="label">Components</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">772</div>
+                    <div class="label">Variants</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">6.5K</div>
+                    <div class="label">Spec Lines</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">100%</div>
+                    <div class="label">WCAG AA</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Links -->
+        <section>
+            <h2>📚 Explore</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>📖 Full Specifications</h3>
+                    <p>Interactive viewer with complete component specifications, all sections, tabs, and examples.</p>
+                    <a href="dist/10-critical-components-full.html" class="btn">View Full Specs →</a>
+                </div>
+
+                <div class="card">
+                    <h3>📋 Quick Reference</h3>
+                    <p>Lightweight overview of the 10 critical components with basic information.</p>
+                    <a href="dist/10-critical-components.html" class="btn secondary">Quick View →</a>
+                </div>
+
+                <div class="card">
+                    <h3>📊 Architecture</h3>
+                    <p>Design system architecture, diagnostics, token system, and roadmap.</p>
+                    <a href="nodo-architecture.json" class="btn secondary">View Architecture →</a>
+                </div>
+
+                <div class="card">
+                    <h3>📝 Documentation</h3>
+                    <p>Complete guide to the 10 critical components and design patterns.</p>
+                    <a href="COMPONENTES_10_CRITICOS.md" class="btn secondary">Read Guide →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Components Overview -->
+        <section>
+            <h2>🎯 10 Critical Components</h2>
+            <div class="grid">
+                <div class="card">
+                    <span class="badge">ACTION</span>
+                    <h3>Button</h3>
+                    <p>Interactive element triggering actions with 5 emphasis levels and 300+ variants.</p>
+                    <a href="dist/10-critical-components-full.html#button" class="btn">Explore →</a>
+                </div>
+
+                <div class="card">
+                    <span class="badge">SURFACE</span>
+                    <h3>Card</h3>
+                    <p>Container for grouping related information with 72 variant combinations.</p>
+                    <a href="dist/10-critical-components-full.html#card" class="btn">Explore →</a>
+                </div>
+
+                <div class="card">
+                    <span class="badge">INPUT</span>
+                    <h3>Text Field</h3>
+                    <p>User text input with validation, error handling, and supporting text.</p>
+                    <a href="dist/10-critical-components-full.html#text-field" class="btn">Explore →</a>
+                </div>
+
+                <div class="card">
+                    <span class="badge">INPUT</span>
+                    <h3>Dropdown</h3>
+                    <p>Compact selection component for choosing 1 from 5+ options with keyboard nav.</p>
+                    <a href="dist/10-critical-components-full.html#dropdown" class="btn">Explore →</a>
+                </div>
+
+                <div class="card">
+                    <span class="badge">INPUT</span>
+                    <h3>Checkbox</h3>
+                    <p>Select multiple options with unchecked, checked, and indeterminate states.</p>
+                    <a href="dist/10-critical-components-full.html#checkbox" class="btn">Explore →</a>
+                </div>
+
+                <div class="card">
+                    <span class="badge">INPUT</span>
+                    <h3>Radio Button</h3>
+                    <p>Select exactly 1 from 2-5 mutually exclusive options with group behavior.</p>
+                    <a href="dist/10-critical-components-full.html#radio-button" class="btn">Explore →</a>
+                </div>
+
+                <div class="card">
+                    <span class="badge">INPUT</span>
+                    <h3>Switch</h3>
+                    <p>Toggle switch for binary on/off states with immediate effect and animation.</p>
+                    <a href="dist/10-critical-components-full.html#switch" class="btn">Explore →</a>
+                </div>
+
+                <div class="card">
+                    <span class="badge">FEEDBACK</span>
+                    <h3>Badge</h3>
+                    <p>Small indicator for notification counts or status labels (dot, number, text).</p>
+                    <a href="dist/10-critical-components-full.html#badge" class="btn">Explore →</a>
+                </div>
+
+                <div class="card">
+                    <span class="badge">OVERLAY</span>
+                    <h3>Modal</h3>
+                    <p>Full-screen dialog blocking background with focus trap and keyboard support.</p>
+                    <a href="dist/10-critical-components-full.html#modal" class="btn">Explore →</a>
+                </div>
+
+                <div class="card">
+                    <span class="badge">NAVIGATION</span>
+                    <h3>Navigation Bar</h3>
+                    <p>Fixed footer navigation for 3-5 primary sections with active indicator.</p>
+                    <a href="dist/10-critical-components-full.html#navigation-bar" class="btn">Explore →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section>
+            <h2>✨ Features</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>📦 Material Design 3</h3>
+                    <p>100% compliant with MD3 architecture: color system, typography, spacing, shape, elevation, motion.</p>
+                </div>
+
+                <div class="card">
+                    <h3>🎨 Token-Based</h3>
+                    <p>All specifications use CSS design tokens. No hardcoded values. Easy to maintain and theme.</p>
+                </div>
+
+                <div class="card">
+                    <h3>♿ Accessible</h3>
+                    <p>WCAG 2.1 AA compliant. ARIA roles, keyboard navigation, screen reader support, 44×44dp touch targets.</p>
+                </div>
+
+                <div class="card">
+                    <h3>🎯 13-Section Specs</h3>
+                    <p>Each component: identity, purpose, anatomy, variants, specs, states, behavior, composition, guidelines, accessibility, code, related, changelog.</p>
+                </div>
+
+                <div class="card">
+                    <h3>💾 JSON Schema</h3>
+                    <p>Validated against JSON Schema 2020-12. Ensures consistency and enables automation.</p>
+                </div>
+
+                <div class="card">
+                    <h3>🔄 Replicable</h3>
+                    <p>Patterns documented for extending to all 128 components in NODO system.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section>
+            <div class="cta">
+                <h3>🚀 Ready for Agent Training?</h3>
+                <p>This documentation framework enables AI agents to understand component specifications deterministically and generate UI implementations with high fidelity. All components follow the same 13-section pattern, making the system predictable and reproducible.</p>
+                <p style="margin-top: var(--spacing4);"><a href="dist/10-critical-components-full.html" class="btn">View Complete Specs →</a></p>
+            </div>
+        </section>
+
+        <!-- Technical Info -->
+        <section>
+            <h2>🔧 Technical Stack</h2>
+            <ul>
+                <li><strong>Format:</strong> JSON Schema 2020-12 validated specifications</li>
+                <li><strong>Design Tokens:</strong> CSS custom properties (--nodo-primary, --spacing4, etc.)</li>
+                <li><strong>Architecture:</strong> Material Design 3 (2-layer color, 5 typography roles, 4px spacing grid)</li>
+                <li><strong>Accessibility:</strong> ARIA attributes, keyboard navigation, semantic HTML, WCAG 2.1 AA</li>
+                <li><strong>Code:</strong> Executable HTML + CSS using only design tokens</li>
+                <li><strong>Validation:</strong> Python build.py checker (C01-C25 validation suite)</li>
+            </ul>
+        </section>
+
+        <!-- File Structure -->
+        <section>
+            <h2>📂 File Structure</h2>
+            <div style="background: #f5f5f5; padding: var(--spacing4); border-radius: var(--radius-md); font-family: monospace; font-size: 13px; overflow-x: auto;">
+<pre>design-system/
+├── components/                           # Component specifications
+│   ├── button.json
+│   ├── card-medium.json
+│   ├── text-field.json
+│   ├── dropdown.json
+│   ├── checkbox.json
+│   ├── radio-button.json
+│   ├── switch.json
+│   ├── badge.json
+│   ├── modal.json
+│   └── navigation-bar.json
+├── schema/
+│   └── component.schema.json             # JSON Schema validator
+├── dist/
+│   ├── 10-critical-components-full.html  # Full interactive viewer
+│   └── preview.html
+├── tools/
+│   └── build.py                          # Validator + HTML generator
+├── nodo-architecture.json                # System architecture
+├── COMPONENTES_10_CRITICOS.md            # Documentation
+└── README.md                             # Usage guide</pre>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>🎨 NODO Design System v1.0 • September 2026 • GitHub Copilot + NODO Team</p>
+        <p><a href="https://github.com/JCCX-DSGNOPS/jccxdsgnops.github.io" style="color: var(--nodo-primary); text-decoration: none;">View on GitHub →</a></p>
+    </footer>
+</body>
+</html>
