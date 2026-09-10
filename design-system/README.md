@@ -1,15 +1,17 @@
-# NODO Design System — Framework de documentación de componentes
+# 🎨 NODO Design System — 10 Componentes Críticos
 
-Este directorio define **cómo se documenta un componente de NODO** para que un agente
-pueda reconstruir la interfaz sin abrir Figma ni leer el código fuente.
+## 🏠 **[OPEN DESIGN SYSTEM →](dist/index.html)**
+
+**Único punto de entrada:** Un home central con sidebar navigation + 7 tabs por componente.
 
 ```
 design-system/
-├── nodo-architecture.json        Arquitectura completa del sistema + diagnóstico + roadmap
-├── schema/component.schema.json  Contrato de documentación (JSON Schema 2020-12)
-├── components/*.json             Especificaciones (3 ejemplos de referencia)
-├── tools/build.py                Validador del checklist + generador HTML
-└── dist/                         Salida generada
+├── dist/
+│   └── index.html                ⭐ MAIN HOME (navegación + 10 componentes)
+├── components/                   JSON specifications (10 componentes)
+├── schema/component.schema.json  JSON Schema validator
+├── nodo-architecture.json        System architecture + roadmap
+└── tools/build.py                Validator
 ```
 
 ## Comandos
