@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NODO Design System — 10 Critical Components</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --nodo-primary: #0039a6;
+            --nodo-primary-container: #dde1ff;
+            --on-primary: #ffffff;
+            --surface: #fffbfe;
+            --surface-container-low: #f7f2fa;
+            --surface-container: #f3eef7;
+            --surface-container-high: #ede8f1;
+            --on-surface: #1c1b1f;
+            --on-surface-variant: #49454f;
+            --outline: #79747e;
+            --outline-low: #e7e0ec;
+            --spacing2: 8px;
+            --spacing3: 12px;
+            --spacing4: 16px;
+            --spacing6: 24px;
+            --radius-md: 12px;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--surface); color: var(--on-surface); }
+        header { position: fixed; top: 0; left: 0; right: 0; height: 64px; background: var(--surface-container-high); border-bottom: 1px solid var(--outline-low); display: flex; align-items: center; padding: 0 var(--spacing6); z-index: 999; }
+        header h1 { font-size: 18px; font-weight: 700; }
+        main { display: flex; margin-top: 64px; }
+        aside { position: fixed; left: 0; top: 64px; width: 280px; height: calc(100vh - 64px); background: var(--surface-container-low); border-right: 1px solid var(--outline-low); overflow-y: auto; padding: var(--spacing4); }
+        aside h2 { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--on-surface-variant); margin: var(--spacing4) 0 var(--spacing2); }
+        aside h2:first-child { margin-top: 0; }
+        aside button { width: 100%; padding: var(--spacing2) var(--spacing3); border: none; border-radius: var(--radius-md); background: transparent; color: var(--on-surface); text-align: left; cursor: pointer; font-size: 14px; }
+        aside button:hover { background: rgba(0, 57, 166, 0.08); }
+        aside button.active { background: rgba(0, 57, 166, 0.12); color: var(--nodo-primary); font-weight: 600; }
+        .content { margin-left: 280px; flex: 1; padding: var(--spacing6); max-width: 1200px; }
+        .component { display: none; }
+        .component.active { display: block; animation: fadeIn 200ms ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .comp-header { margin-bottom: var(--spacing6); border-bottom: 2px solid var(--outline-low); padding-bottom: var(--spacing4); }
+        .comp-header h2 { font-size: 28px; font-weight: 700; margin-bottom: var(--spacing2); }
+        .badge { display: inline-block; background: var(--nodo-primary-container); color: var(--nodo-primary); padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-right: var(--spacing2); }
+        .comp-header .meta { font-size: 13px; color: var(--on-surface-variant); margin-bottom: var(--spacing3); }
+        .tabs { display: flex; border-bottom: 1px solid var(--outline-low); margin-bottom: var(--spacing6); }
+        .tab-btn { padding: var(--spacing3) var(--spacing4); border: none; background: transparent; color: var(--on-surface-variant); cursor: pointer; font-size: 13px; font-weight: 500; border-bottom: 2px solid transparent; white-space: nowrap; }
+        .tab-btn:hover { color: var(--nodo-primary); }
+        .tab-btn.active { color: var(--nodo-primary); border-bottom-color: var(--nodo-primary); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        section { margin-bottom: var(--spacing6); }
+        h3 { font-size: 16px; font-weight: 700; margin-bottom: var(--spacing3); }
+        h4 { font-size: 14px; font-weight: 600; margin-top: var(--spacing3); margin-bottom: var(--spacing2); }
+        p, li { font-size: 14px; line-height: 1.6; margin-bottom: var(--spacing2); }
+        ul, ol { padding-left: var(--spacing6); }
+        .card { background: var(--surface-container); border: 1px solid var(--outline-low); border-radius: var(--radius-md); padding: var(--spacing3); margin-bottom: var(--spacing2); }
+        .code-block { background: var(--surface-container-high); border: 1px solid var(--outline-low); border-radius: var(--radius-md); padding: var(--spacing4); overflow-x: auto; font-family: "Monaco", monospace; font-size: 12px; line-height: 1.5; margin-bottom: var(--spacing3); white-space: pre-wrap; word-break: break-word; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: var(--spacing3); font-size: 13px; }
+        table th, table td { border: 1px solid var(--outline-low); padding: var(--spacing2) var(--spacing3); text-align: left; }
+        table th { background: var(--surface-container); font-weight: 600; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎨 NODO Design System — 10 Critical Components</h1>
+    </header>
+
+    <main>
+        <aside>
+            <h2>Input</h2>
+            <button class="comp-btn " data-comp="dropdown">Dropdown / Select</button>
+            <button class="comp-btn " data-comp="checkbox">Checkbox</button>
+            <button class="comp-btn " data-comp="radio-button">Radio Button</button>
+            <button class="comp-btn " data-comp="switch">Switch</button>
+            <h2>Feedback</h2>
+            <button class="comp-btn " data-comp="badge">Badge</button>
+            <h2>Overlay</h2>
+            <button class="comp-btn " data-comp="modal">Modal / Dialog</button>
+            <h2>Navigation</h2>
+            <button class="comp-btn " data-comp="navigation-bar">Navigation Bar</button>
+        </aside>
+
+        <div class="content">
+            <div class="component active" data-comp="button">
+                <div class="comp-header">
+                    <h2>Button</h2>
+                    <div class="meta">
+                        <span class="badge">CONTROLS</span>
+                        <span class="badge">v1.0.0</span>
+                        <span class="badge">STABLE</span>
+                    </div>
+                    <p>Control que ejecuta una acción concreta e inmediata sobre la tarea en curso.</p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'button-overview')">Overview</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'button-anatomy')">Anatomy</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'button-variants')">Variants</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'button-specs')">Specs</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'button-behavior')">Behavior</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'button-access')">Accessibility</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'button-code')">Code</button>
+                </div>
+
+                <!-- OVERVIEW TAB -->
+                <div class="tab-content active" id="button-overview">
+                    <section>
+                        <h3>When to Use</h3>
+                        <ul>
+                            <li>El usuario debe ejecutar una acción que modifica el estado del sistema o avanza el flujo.</li>
+                            <li>La acción tiene un resultado nombrable en un verbo imperativo.</li>
+                            <li>La acción vive dentro de un formulario, una barra, una card o una fila de lista.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>When NOT to Use</h3>
+                        <div class='card'><strong>La acción navega a otra pantalla sin modificar estado y debe verse como enlace.</strong><br/>→ Use: text-link</div>
+                        <div class='card'><strong>Se necesitan dos acciones equilibradas ancladas al pie de la pantalla.</strong><br/>→ Use: docked-buttons</div>
+                        <div class='card'><strong>La acción es un filtro o una selección múltiple.</strong><br/>→ Use: chip</div>
+                        <div class='card'><strong>La acción es única, iconográfica y global (cerrar, volver, menú).</strong><br/>→ Use: close</div>
+                        <div class='card'><strong>La acción requiere una espera obligatoria antes de habilitarse.</strong><br/>→ Use: timed-button</div>
+                    </section>
+                </div>
+
+                <!-- ANATOMY TAB -->
+                <div class="tab-content" id="button-anatomy">
+                    <section>
+                        <h3>Component Parts</h3>
+                        <table>
+                            <tr><th>#</th><th>Name</th><th>Required</th><th>Role</th><th>Cardinality</th></tr>
+                            <tr><td>1</td><td><strong>Container</strong></td><td>✓</td><td>container</td><td>1</td></tr>
+                            <tr><td>2</td><td><strong>State layer</strong></td><td>✓</td><td>decoration</td><td>1</td></tr>
+                            <tr><td>3</td><td><strong>Leading icon</strong></td><td>○</td><td>icon</td><td>0..1</td></tr>
+                            <tr><td>4</td><td><strong>Label</strong></td><td>✓</td><td>text</td><td>1</td></tr>
+                            <tr><td>5</td><td><strong>Trailing icon</strong></td><td>○</td><td>icon</td><td>0..1</td></tr>
+                            <tr><td>6</td><td><strong>Loader</strong></td><td>○</td><td>indicator</td><td>0..1</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- VARIANTS TAB -->
+                <div class="tab-content" id="button-variants">
+                    <section>
+                        <h3>Variant Axes</h3>
+                        <h4>Emphasis / type</h4>
+                        <p><strong>Values:</strong> filled, tonal, outlined, text</p>
+                        <p><strong>Default:</strong> filled</p>
+                        <h4>Size</h4>
+                        <p><strong>Values:</strong> xSmall, small, medium, large, xLarge</p>
+                        <p><strong>Default:</strong> medium</p>
+                        <h4>Color role</h4>
+                        <p><strong>Values:</strong> primary, error, neutral</p>
+                        <p><strong>Default:</strong> primary</p>
+                        <h4>Icon placement</h4>
+                        <p><strong>Values:</strong> none, leading, trailing, both</p>
+                        <p><strong>Default:</strong> none</p>
+                        <h4>Width</h4>
+                        <p><strong>Values:</strong> hug, fill</p>
+                        <p><strong>Default:</strong> hug</p>
+                        <p><strong>Total Combinations:</strong> 480</p>
+                    </section>
+                </div>
+
+                <!-- SPECS TAB -->
+                <div class="tab-content" id="button-specs">
+                    <section>
+                        <h3>Base Specifications (Tokens)</h3>
+                        <div class="code-block">
+container:
+  background: --primary
+  radius: --radius-small
+  paddingInline: --spacing6
+  gap: --spacing2
+  height: 48px
+  minHeight: 44px
+state-layer:
+  background: --on-primary
+  opacity: 0
+leading-icon:
+  iconSize: 20px
+  foreground: --on-primary
+label:
+  typography: label/large
+  foreground: --on-primary
+  maxLines: 1
+trailing-icon:
+  iconSize: 20px
+  foreground: --on-primary
+loader:
+  iconSize: 20px
+  foreground: --on-primary
+                        </div>
+                    </section>
+                </div>
+
+                <!-- BEHAVIOR TAB -->
+                <div class="tab-content" id="button-behavior">
+                    <section>
+                        <h3>States</h3>
+                        <table>
+                            <tr><th>State</th><th>Trigger</th></tr>
+                            <tr><td><strong>default</strong></td><td>Reposo, acción disponible.</td></tr>
+                            <tr><td><strong>hover</strong></td><td>Puntero sobre el container.</td></tr>
+                            <tr><td><strong>focus-visible</strong></td><td>El container recibe foco por teclado.</td></tr>
+                            <tr><td><strong>pressed</strong></td><td>pointerdown o Enter/Space mantenidos.</td></tr>
+                            <tr><td><strong>disabled</strong></td><td>La acción no está disponible en este momento.</td></tr>
+                            <tr><td><strong>loading</strong></td><td>La acción está en curso.</td></tr>
+                            <tr><td><strong>error</strong></td><td>La acción falló y el botón ofrece reintento.</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- ACCESSIBILITY TAB -->
+                <div class="tab-content" id="button-access">
+                    <section>
+                        <h3>ARIA Role</h3>
+                        <p><code>role="button"</code></p>
+                    </section>
+                    <section>
+                        <h3>ARIA Attributes</h3>
+                        <ul>
+                            <li><code>{'attribute': 'aria-disabled', 'value': 'true', 'when': 'state = disabled y se quiere conservar el foco para explicar el motivo'}</code></li>
+                            <li><code>{'attribute': 'aria-busy', 'value': 'true', 'when': 'state = loading'}</code></li>
+                            <li><code>{'attribute': 'aria-expanded', 'value': 'true | false', 'when': 'el botón abre un menú o un panel'}</code></li>
+                            <li><code>{'attribute': 'aria-controls', 'value': 'id del elemento controlado', 'when': 'el botón abre un menú o un panel'}</code></li>
+                            <li><code>{'attribute': 'aria-describedby', 'value': 'id del texto que explica el bloqueo', 'when': 'state = disabled'}</code></li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Keyboard Support</h3>
+                        <table>
+                            <tr><th>Key</th><th>Action</th></tr>
+                            <tr><td>Tab</td><td>Enfoca el botón. Un solo tab stop.</td></tr>
+                            <tr><td>Enter</td><td>Activa la acción.</td></tr>
+                            <tr><td>Space</td><td>Activa la acción al soltar.</td></tr>
+                            <tr><td>Escape</td><td>Cierra el menú o panel asociado si el botón lo abrió.</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- CODE TAB -->
+                <div class="tab-content" id="button-code">
+                    <section>
+                        <h3>HTML</h3>
+                        <div class="code-block">
+&lt;button class="nodo-btn nodo-btn--filled nodo-btn--medium" type="button"&gt;
+  &lt;span class="nodo-btn__state-layer" aria-hidden="true"&gt;&lt;/span&gt;
+  &lt;svg class="nodo-btn__icon" aria-hidden="true" focusable="false" width="20" height="20"&gt;&lt;use href="#icon-send"&gt;&lt;/use&gt;&lt;/svg&gt;
+  &lt;span class="nodo-btn__label"&gt;Confirmar pago&lt;/span&gt;
+&lt;/button&gt;                        </div>
+                    </section>
+                    <section>
+                        <h3>CSS</h3>
+                        <div class="code-block">
+.nodo-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing2);
+  min-width: 64px;
+  height: 48px;
+  padding-inline: var(--spacing6);
+  border: none;
+  border-radius: var(--radius-small);
+  font-family: inherit;
+  font-size: 14px; line-height: 20px; font-weight: 600;
+  cursor: pointer;
+  isolation: isolate;
+  transition: transform 100ms cubic-bezier(0.4, 0, 1, 1);
+}
+.nodo-btn::before { /* área táctil mínima 44dp sin alterar el layout */
+  content: ""; position: absolute; inset: 50% auto auto 50%;
+  width: 100%; height: 100%; min-width: 44px; min-height: 44px;
+  transform: translate(-50%, -50%);
+}
+.nodo-btn__state-layer {
+  position: absolute; inset: 0; z-index: 0;
+  border-radius: inherit; opacity: 0;
+  transition: opacity var(--transition-fast);
+  pointer-events: none;
+}
+.nodo-btn &gt; :not(.nodo-btn__state-layer) { position: relative; z-index: 1; }
+
+/* Variantes */
+.nodo-btn--filled   { background: var(--primary); color: var(--on-primary); }
+.nodo-btn--filled   .nodo-btn__state-layer { background: var(--on-primary); }
+.nodo-btn--tonal    { background: var(--primary-container); color: var(--on-primary-container); }
+.nodo-btn--tonal    .nodo-btn__state-layer { background: var(--on-primary-container); }
+.nodo-btn--outlined { background: transparent; color: var(--primary); border: 1px solid var(--outline); }
+.nodo-btn--outlined .nodo-btn__state-layer { background: var(--primary); }
+.nodo-btn--text     { background: transparent; color: var(--primary); padding-inline: var(--spacing3); }
+.nodo-btn--text     .nodo-btn__state-layer { background: var(--primary); }
+
+/* Tamaños */
+.nodo-btn--xsmall { height: 32px; padding-inline: var(--spacing3); gap: var(--spacing1); border-radius: var(--radius-xSmall); font-size: 11px; line-height: 16px; }
+.nodo-btn--small  { height: 40px; padding-inline: var(--spacing4); font-size: 12px; line-height: 16px; }
+.nodo-btn--medium { height: 48px; }
+.nodo-btn--large  { height: 56px; padding-inline: var(--spacing8); }
+.nodo-btn--xlarge { height: 64px; padding-inline: var(--spacing10); border-radius: var(--radius-medium); font-size: 16px; line-height: 24px; }
+
+/* Estados */
+.nodo-btn:hover  .nodo-btn__state-layer { opacity: 0.08; }
+.nodo-btn:focus-visible { outline: 2px solid var(--nodo-primary-light); outline-offset: 2px; }
+.nodo-btn:focus-visible .nodo-btn__state-layer { opacity: 0.10; }
+.nodo-btn:active .nodo-btn__state-layer { opacity: 0.10; }
+.nodo-btn:active { transform: scale(0.98); }
+
+.nodo-btn:disabled,
+.nodo-btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  background: color-mix(in srgb, var(--on-surface) 12%, transparent);
+  border-color: transparent;
+  color: color-mix(in srgb, var(--on-surface) 38%, transparent);
+}
+.nodo-btn:disabled .nodo-btn__state-layer { opacity: 0; }
+
+.nodo-btn[aria-busy="true"] { pointer-events: none; }
+.nodo-btn[aria-busy="true"] .nodo-btn__icon { opacity: 0; }
+
+.nodo-btn--error { background: var(--error); color: var(--on-error); }
+.nodo-btn--fill  { width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nodo-btn:active { transform: none; }
+}                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="component " data-comp="card/medium">
+                <div class="comp-header">
+                    <h2>Card Medium</h2>
+                    <div class="meta">
+                        <span class="badge">CARDS</span>
+                        <span class="badge">v1.0.0</span>
+                        <span class="badge">STABLE</span>
+                    </div>
+                    <p>Superficie autocontenida que presenta el preview de un único sujeto y actúa como punto de entrada a su detalle.</p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'card/medium-overview')">Overview</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'card/medium-anatomy')">Anatomy</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'card/medium-variants')">Variants</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'card/medium-specs')">Specs</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'card/medium-behavior')">Behavior</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'card/medium-access')">Accessibility</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'card/medium-code')">Code</button>
+                </div>
+
+                <!-- OVERVIEW TAB -->
+                <div class="tab-content active" id="card/medium-overview">
+                    <section>
+                        <h3>When to Use</h3>
+                        <ul>
+                            <li>El contenido trata sobre un único sujeto y tiene ≥2 niveles de jerarquía (p. ej. título + soporte).</li>
+                            <li>Varios sujetos comparables se muestran juntos y el usuario debe compararlos antes de elegir.</li>
+                            <li>La superficie completa navega a una vista de detalle.</li>
+                            <li>Se necesita media (imagen, thumbnail o ilustración) junto al texto.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>When NOT to Use</h3>
+                        <div class='card'><strong>El contenido es una sola línea de texto sin media ni acciones.</strong><br/>→ Use: item-list</div>
+                        <div class='card'><strong>Solo se muestra una métrica o un atajo compacto.</strong><br/>→ Use: card/small</div>
+                        <div class='card'><strong>El contenido es un mensaje del sistema que interrumpe la tarea.</strong><br/>→ Use: banner</div>
+                        <div class='card'><strong>El contenido necesita múltiples secciones separadas por divisores y más de dos acciones.</strong><br/>→ Use: card-complex</div>
+                        <div class='card'><strong>El sujeto es un importe financiero con formato monetario.</strong><br/>→ Use: card/amount</div>
+                    </section>
+                </div>
+
+                <!-- ANATOMY TAB -->
+                <div class="tab-content" id="card/medium-anatomy">
+                    <section>
+                        <h3>Component Parts</h3>
+                        <table>
+                            <tr><th>#</th><th>Name</th><th>Required</th><th>Role</th><th>Cardinality</th></tr>
+                            <tr><td>1</td><td><strong>Container</strong></td><td>✓</td><td>container</td><td>1</td></tr>
+                            <tr><td>2</td><td><strong>Media</strong></td><td>○</td><td>media</td><td>0..1</td></tr>
+                            <tr><td>3</td><td><strong>Content block</strong></td><td>○</td><td>region</td><td>0..1</td></tr>
+                            <tr><td>4</td><td><strong>Headline</strong></td><td>○</td><td>text</td><td>0..1</td></tr>
+                            <tr><td>5</td><td><strong>Subhead</strong></td><td>○</td><td>text</td><td>0..1</td></tr>
+                            <tr><td>6</td><td><strong>Supporting text</strong></td><td>○</td><td>text</td><td>0..1</td></tr>
+                            <tr><td>7</td><td><strong>Action area</strong></td><td>○</td><td>action</td><td>0..1</td></tr>
+                            <tr><td>8</td><td><strong>State layer</strong></td><td>○</td><td>decoration</td><td>0..1</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- VARIANTS TAB -->
+                <div class="tab-content" id="card/medium-variants">
+                    <section>
+                        <h3>Variant Axes</h3>
+                        <h4>Emphasis / type</h4>
+                        <p><strong>Values:</strong> elevated, filled, outlined</p>
+                        <p><strong>Default:</strong> elevated</p>
+                        <h4>Media placement</h4>
+                        <p><strong>Values:</strong> none, top, leading</p>
+                        <p><strong>Default:</strong> top</p>
+                        <h4>Interactive</h4>
+                        <p><strong>Values:</strong> static, navigable</p>
+                        <p><strong>Default:</strong> navigable</p>
+                        <h4>Actions</h4>
+                        <p><strong>Values:</strong> none, single, dual, overflow</p>
+                        <p><strong>Default:</strong> none</p>
+                        <p><strong>Total Combinations:</strong> 72</p>
+                    </section>
+                </div>
+
+                <!-- SPECS TAB -->
+                <div class="tab-content" id="card/medium-specs">
+                    <section>
+                        <h3>Base Specifications (Tokens)</h3>
+                        <div class="code-block">
+container:
+  background: --surface-container-low
+  foreground: --on-surface
+  radius: --radius-medium
+  elevation: --elevation-1
+  paddingBlock: --spacing4
+  paddingInline: --spacing4
+  gap: --spacing3
+  maxWidth: none
+media:
+  radius: --radius-small
+  aspectRatio: 16 / 9
+  background: --surface-container
+content:
+  gap: --spacing1
+headline:
+  typography: title/medium
+  foreground: --on-surface
+  maxLines: 2
+subhead:
+  typography: label/medium
+  foreground: --on-surface-low
+  maxLines: 1
+supporting-text:
+  typography: body/medium
+  foreground: --on-surface-variant
+  maxLines: 3
+actions:
+  gap: --spacing2
+  paddingBlock: --spacing2
+state-layer:
+  background: --on-surface
+  opacity: 0
+                        </div>
+                    </section>
+                </div>
+
+                <!-- BEHAVIOR TAB -->
+                <div class="tab-content" id="card/medium-behavior">
+                    <section>
+                        <h3>States</h3>
+                        <table>
+                            <tr><th>State</th><th>Trigger</th></tr>
+                            <tr><td><strong>default</strong></td><td>Estado de reposo.</td></tr>
+                            <tr><td><strong>hover</strong></td><td>Puntero sobre el container. Solo en dispositivos con hover.</td></tr>
+                            <tr><td><strong>focus-visible</strong></td><td>El container recibe foco por teclado.</td></tr>
+                            <tr><td><strong>pressed</strong></td><td>Pointer down o Enter/Space mantenidos sobre el container.</td></tr>
+                            <tr><td><strong>selected</strong></td><td>La card forma parte de un grupo de selección y está elegida.</td></tr>
+                            <tr><td><strong>dragged</strong></td><td>La card se levanta para reordenar dentro de una colección.</td></tr>
+                            <tr><td><strong>disabled</strong></td><td>La card existe pero no es accionable.</td></tr>
+                            <tr><td><strong>loading</strong></td><td>El contenido de la card aún no está disponible.</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- ACCESSIBILITY TAB -->
+                <div class="tab-content" id="card/medium-access">
+                    <section>
+                        <h3>ARIA Role</h3>
+                        <p><code>role="article"</code></p>
+                    </section>
+                    <section>
+                        <h3>ARIA Attributes</h3>
+                        <ul>
+                            <li><code>{'attribute': 'aria-labelledby', 'value': 'id del headline', 'when': 'siempre que exista headline'}</code></li>
+                            <li><code>{'attribute': 'aria-describedby', 'value': 'id del supporting-text', 'when': 'cuando el texto de soporte es necesario para decidir'}</code></li>
+                            <li><code>{'attribute': 'aria-selected', 'value': 'true | false', 'when': 'la card pertenece a un grupo de selección'}</code></li>
+                            <li><code>{'attribute': 'aria-disabled', 'value': 'true', 'when': 'state = disabled'}</code></li>
+                            <li><code>{'attribute': 'aria-busy', 'value': 'true', 'when': 'state = loading'}</code></li>
+                            <li><code>{'attribute': 'aria-roledescription', 'value': 'tarjeta', 'when': 'opcional, solo si aporta claridad en el contexto de la colección'}</code></li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Keyboard Support</h3>
+                        <table>
+                            <tr><th>Key</th><th>Action</th></tr>
+                            <tr><td>Tab</td><td>Entra en la card. Si es navegable genera UN solo tab stop; si es estática con acciones, cada acción es su propio tab stop en orden visual.</td></tr>
+                            <tr><td>Shift + Tab</td><td>Sale de la card hacia el elemento anterior.</td></tr>
+                            <tr><td>Enter</td><td>Activa la card navegable o la acción enfocada.</td></tr>
+                            <tr><td>Space</td><td>Activa la card cuando su rol es button; alterna la selección en grupos de elección.</td></tr>
+                            <tr><td>Arrow Up / Down / Left / Right</td><td>Mueve entre cards dentro de una colección con roving tabindex, siguiendo el orden visual del grid.</td></tr>
+                            <tr><td>Escape</td><td>Cancela un arrastre en curso y devuelve la card a su posición original.</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- CODE TAB -->
+                <div class="tab-content" id="card/medium-code">
+                    <section>
+                        <h3>HTML</h3>
+                        <div class="code-block">
+&lt;a class="nodo-card nodo-card--elevated" href="/movimientos/8842" aria-labelledby="card-8842-title" aria-describedby="card-8842-desc"&gt;
+  &lt;span class="nodo-card__state-layer" aria-hidden="true"&gt;&lt;/span&gt;
+  &lt;img class="nodo-card__media" src="/img/recibo.webp" alt=""&gt;
+  &lt;span class="nodo-card__content"&gt;
+    &lt;span class="nodo-card__headline" id="card-8842-title"&gt;Transferencia a Ana Ruiz&lt;/span&gt;
+    &lt;span class="nodo-card__subhead"&gt;Hoy, 14:32&lt;/span&gt;
+    &lt;span class="nodo-card__supporting" id="card-8842-desc"&gt;Enviada desde tu cuenta principal&lt;/span&gt;
+  &lt;/span&gt;
+&lt;/a&gt;                        </div>
+                    </section>
+                    <section>
+                        <h3>CSS</h3>
+                        <div class="code-block">
+.nodo-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing3);
+  padding: var(--spacing4);
+  border-radius: var(--radius-medium);
+  background: var(--surface-container-low);
+  color: var(--on-surface);
+  text-decoration: none;
+  isolation: isolate;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+.nodo-card--elevated { box-shadow: var(--elevation-1); }
+.nodo-card--filled   { background: var(--surface-container); box-shadow: none; }
+.nodo-card--outlined { background: var(--surface); box-shadow: none; border: 1px solid var(--outline-high); }
+
+.nodo-card__state-layer {
+  position: absolute; inset: 0; z-index: 0;
+  border-radius: inherit;
+  background: var(--on-surface);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  pointer-events: none;
+}
+.nodo-card &gt; :not(.nodo-card__state-layer) { position: relative; z-index: 1; }
+
+.nodo-card:hover .nodo-card__state-layer { opacity: 0.08; }
+.nodo-card:hover.nodo-card--elevated { box-shadow: var(--elevation-2); }
+.nodo-card:focus-visible {
+  outline: 2px solid var(--nodo-primary-light);
+  outline-offset: 2px;
+}
+.nodo-card:focus-visible .nodo-card__state-layer { opacity: 0.10; }
+.nodo-card:active .nodo-card__state-layer { opacity: 0.10; }
+.nodo-card:active { transform: scale(0.995); box-shadow: var(--elevation-1); }
+
+.nodo-card[aria-selected="true"] {
+  background: var(--primary-container);
+  border: 1.5px solid var(--primary);
+}
+.nodo-card[aria-disabled="true"] {
+  pointer-events: none;
+  box-shadow: none;
+}
+.nodo-card[aria-disabled="true"] &gt; :not(.nodo-card__state-layer) { opacity: 0.38; }
+
+.nodo-card__media {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-small);
+  background: var(--surface-container);
+}
+.nodo-card__content { display: flex; flex-direction: column; gap: var(--spacing1); }
+.nodo-card__headline {
+  font-size: 16px; line-height: 24px; font-weight: 600;
+  color: var(--on-surface);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.nodo-card__subhead {
+  font-size: 12px; line-height: 16px; font-weight: 600;
+  color: var(--on-surface-low);
+}
+.nodo-card__supporting {
+  font-size: 14px; line-height: 20px; font-weight: 400;
+  color: var(--on-surface-variant);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.nodo-card__actions {
+  display: flex; justify-content: flex-end; gap: var(--spacing2);
+  padding-block: var(--spacing2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nodo-card { transition: opacity 100ms linear; }
+  .nodo-card:active { transform: none; }
+}                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="component " data-comp="text-field">
+                <div class="comp-header">
+                    <h2>Text Field</h2>
+                    <div class="meta">
+                        <span class="badge">INPUTS</span>
+                        <span class="badge">v1.0.0</span>
+                        <span class="badge">STABLE</span>
+                    </div>
+                    <p>Campo de entrada de una sola línea con etiqueta persistente, validación y mensajería de ayuda o error.</p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'text-field-overview')">Overview</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'text-field-anatomy')">Anatomy</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'text-field-variants')">Variants</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'text-field-specs')">Specs</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'text-field-behavior')">Behavior</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'text-field-access')">Accessibility</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'text-field-code')">Code</button>
+                </div>
+
+                <!-- OVERVIEW TAB -->
+                <div class="tab-content active" id="text-field-overview">
+                    <section>
+                        <h3>When to Use</h3>
+                        <ul>
+                            <li>El usuario debe introducir texto libre corto: nombre, email, importe, código.</li>
+                            <li>El valor requiere validación y comunicación del resultado de esa validación.</li>
+                            <li>El campo forma parte de un formulario con etiquetas visibles y persistentes.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>When NOT to Use</h3>
+                        <div class='card'><strong>El texto puede ocupar varias líneas.</strong><br/>→ Use: text-area</div>
+                        <div class='card'><strong>El valor procede de un conjunto cerrado de opciones.</strong><br/>→ Use: dropdown-input</div>
+                        <div class='card'><strong>El valor es un código de verificación de N dígitos.</strong><br/>→ Use: input-otp</div>
+                        <div class='card'><strong>El campo filtra una colección en tiempo real.</strong><br/>→ Use: search</div>
+                        <div class='card'><strong>El valor es una fecha.</strong><br/>→ Use: date-picker</div>
+                    </section>
+                </div>
+
+                <!-- ANATOMY TAB -->
+                <div class="tab-content" id="text-field-anatomy">
+                    <section>
+                        <h3>Component Parts</h3>
+                        <table>
+                            <tr><th>#</th><th>Name</th><th>Required</th><th>Role</th><th>Cardinality</th></tr>
+                            <tr><td>1</td><td><strong>Field container</strong></td><td>✓</td><td>container</td><td>1</td></tr>
+                            <tr><td>2</td><td><strong>Label</strong></td><td>✓</td><td>text</td><td>1</td></tr>
+                            <tr><td>3</td><td><strong>Leading icon</strong></td><td>○</td><td>icon</td><td>0..1</td></tr>
+                            <tr><td>4</td><td><strong>Input</strong></td><td>✓</td><td>text</td><td>1</td></tr>
+                            <tr><td>5</td><td><strong>Placeholder</strong></td><td>○</td><td>text</td><td>0..1</td></tr>
+                            <tr><td>6</td><td><strong>Trailing action</strong></td><td>○</td><td>action</td><td>0..1</td></tr>
+                            <tr><td>7</td><td><strong>Supporting text</strong></td><td>○</td><td>text</td><td>0..1</td></tr>
+                            <tr><td>8</td><td><strong>Character counter</strong></td><td>○</td><td>indicator</td><td>0..1</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- VARIANTS TAB -->
+                <div class="tab-content" id="text-field-variants">
+                    <section>
+                        <h3>Variant Axes</h3>
+                        <h4>Emphasis / type</h4>
+                        <p><strong>Values:</strong> outlined, filled</p>
+                        <p><strong>Default:</strong> outlined</p>
+                        <h4>Size</h4>
+                        <p><strong>Values:</strong> small, medium</p>
+                        <p><strong>Default:</strong> medium</p>
+                        <h4>Icon placement</h4>
+                        <p><strong>Values:</strong> none, leading, trailing, both</p>
+                        <p><strong>Default:</strong> none</p>
+                        <h4>Supporting text</h4>
+                        <p><strong>Values:</strong> none, helper, counter</p>
+                        <p><strong>Default:</strong> helper</p>
+                        <p><strong>Total Combinations:</strong> 48</p>
+                    </section>
+                </div>
+
+                <!-- SPECS TAB -->
+                <div class="tab-content" id="text-field-specs">
+                    <section>
+                        <h3>Base Specifications (Tokens)</h3>
+                        <div class="code-block">
+field:
+  background: transparent
+  border: --outline-high
+  borderWidth: 1px
+  radius: --radius-small
+  paddingInline: --spacing4
+  gap: --spacing2
+  height: 56px
+label:
+  typography: label/medium
+  foreground: --on-surface-variant
+leading-icon:
+  iconSize: 20px
+  foreground: --on-surface-low
+input:
+  typography: body/large
+  foreground: --on-surface
+placeholder:
+  typography: body/large
+  foreground: --on-surface-low
+trailing-icon:
+  iconSize: 20px
+  foreground: --on-surface-variant
+supporting-text:
+  typography: body/small
+  foreground: --on-surface-variant
+counter:
+  typography: body/small
+  foreground: --on-surface-low
+                        </div>
+                    </section>
+                </div>
+
+                <!-- BEHAVIOR TAB -->
+                <div class="tab-content" id="text-field-behavior">
+                    <section>
+                        <h3>States</h3>
+                        <table>
+                            <tr><th>State</th><th>Trigger</th></tr>
+                            <tr><td><strong>default</strong></td><td>Reposo, sin foco y sin valor.</td></tr>
+                            <tr><td><strong>hover</strong></td><td>Puntero sobre el campo.</td></tr>
+                            <tr><td><strong>focused</strong></td><td>El input tiene el foco.</td></tr>
+                            <tr><td><strong>filled</strong></td><td>El campo tiene valor y no tiene el foco.</td></tr>
+                            <tr><td><strong>error</strong></td><td>La validación ha fallado.</td></tr>
+                            <tr><td><strong>success</strong></td><td>La validación asíncrona ha pasado.</td></tr>
+                            <tr><td><strong>validating</strong></td><td>Validación asíncrona en curso.</td></tr>
+                            <tr><td><strong>read-only</strong></td><td>El valor se muestra pero no se puede editar.</td></tr>
+                            <tr><td><strong>disabled</strong></td><td>El campo no está disponible.</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- ACCESSIBILITY TAB -->
+                <div class="tab-content" id="text-field-access">
+                    <section>
+                        <h3>ARIA Role</h3>
+                        <p><code>role="textbox"</code></p>
+                    </section>
+                    <section>
+                        <h3>ARIA Attributes</h3>
+                        <ul>
+                            <li><code>{'attribute': 'aria-invalid', 'value': 'true', 'when': 'state = error'}</code></li>
+                            <li><code>{'attribute': 'aria-describedby', 'value': 'id del supporting-text y del counter', 'when': 'existe supporting text, error o contador'}</code></li>
+                            <li><code>{'attribute': 'aria-required', 'value': 'true', 'when': 'el campo es obligatorio'}</code></li>
+                            <li><code>{'attribute': 'aria-busy', 'value': 'true', 'when': 'state = validating'}</code></li>
+                            <li><code>{'attribute': 'readonly', 'value': '', 'when': 'state = read-only'}</code></li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Keyboard Support</h3>
+                        <table>
+                            <tr><th>Key</th><th>Action</th></tr>
+                            <tr><td>Tab</td><td>Enfoca el input. La acción trailing interactiva es un tab stop adicional posterior.</td></tr>
+                            <tr><td>Shift + Tab</td><td>Retrocede al campo anterior.</td></tr>
+                            <tr><td>Enter</td><td>Envía el formulario si el campo pertenece a uno.</td></tr>
+                            <tr><td>Escape</td><td>Limpia el valor cuando el campo expone acción de limpiar.</td></tr>
+                            <tr><td>Home / End</td><td>Mueve el cursor al inicio o al final del valor.</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- CODE TAB -->
+                <div class="tab-content" id="text-field-code">
+                    <section>
+                        <h3>HTML</h3>
+                        <div class="code-block">
+&lt;div class="nodo-field"&gt;
+  &lt;label class="nodo-field__label" for="iban"&gt;IBAN&lt;/label&gt;
+  &lt;div class="nodo-field__box"&gt;
+    &lt;svg class="nodo-field__icon" aria-hidden="true" focusable="false" width="20" height="20"&gt;&lt;use href="#icon-bank"&gt;&lt;/use&gt;&lt;/svg&gt;
+    &lt;input class="nodo-field__input"
+           id="iban"
+           type="text"
+           inputmode="text"
+           autocomplete="off"
+           placeholder="ES00 0000 0000 0000 0000 0000"
+           aria-describedby="iban-help"
+           aria-required="true"&gt;
+  &lt;/div&gt;
+  &lt;p class="nodo-field__supporting" id="iban-help"&gt;24 caracteres, sin espacios&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;!-- Estado error: aria-invalid + role="alert" en el mensaje --&gt;
+&lt;!-- &lt;input ... aria-invalid="true" aria-describedby="iban-help"&gt; --&gt;
+&lt;!-- &lt;p class="nodo-field__supporting" id="iban-help" role="alert"&gt;El IBAN debe tener 24 caracteres. Faltan 3.&lt;/p&gt; --&gt;                        </div>
+                    </section>
+                    <section>
+                        <h3>CSS</h3>
+                        <div class="code-block">
+.nodo-field { display: flex; flex-direction: column; gap: var(--spacing1); }
+
+.nodo-field__label {
+  font-size: 12px; line-height: 16px; font-weight: 600;
+  color: var(--on-surface-variant);
+}
+
+.nodo-field__box {
+  display: flex; align-items: center; gap: var(--spacing2);
+  height: 56px;
+  padding-inline: var(--spacing4);
+  border: 1px solid var(--outline-high);
+  border-radius: var(--radius-small);
+  background: transparent;
+  transition: border-color var(--transition-fast), border-width var(--transition-fast);
+}
+.nodo-field__box:hover { border-color: var(--outline); }
+.nodo-field__box:focus-within {
+  border-color: var(--primary);
+  border-width: 2px;
+  padding-inline: calc(var(--spacing4) - 1px); /* compensa el borde para no mover el contenido */
+}
+
+.nodo-field__input {
+  flex: 1; min-width: 0;
+  border: none; outline: none; background: transparent;
+  font-family: inherit; font-size: 16px; line-height: 24px;
+  color: var(--on-surface);
+}
+.nodo-field__input::placeholder { color: var(--on-surface-low); }
+
+.nodo-field__icon { flex: none; color: var(--on-surface-low); }
+
+.nodo-field__supporting {
+  margin: 0;
+  min-height: 16px; /* espacio reservado: evita layout shift al aparecer el error */
+  font-size: 12px; line-height: 16px;
+  color: var(--on-surface-variant);
+}
+
+/* Estados */
+.nodo-field:has(:invalid:not(:placeholder-shown)) .nodo-field__box,
+.nodo-field:has([aria-invalid="true"]) .nodo-field__box { border-color: var(--error); border-width: 2px; }
+.nodo-field:has([aria-invalid="true"]) .nodo-field__label,
+.nodo-field:has([aria-invalid="true"]) .nodo-field__supporting { color: var(--error); }
+
+.nodo-field:has(:read-only) .nodo-field__box { background: var(--surface-container); border-color: var(--outline-low); }
+.nodo-field:has(:disabled) .nodo-field__box { border-color: transparent; background: color-mix(in srgb, var(--on-surface) 12%, transparent); }
+.nodo-field:has(:disabled) .nodo-field__label,
+.nodo-field:has(:disabled) .nodo-field__supporting { color: color-mix(in srgb, var(--on-surface) 38%, transparent); }
+
+/* Variante filled */
+.nodo-field--filled .nodo-field__box { background: var(--surface-container); border-color: transparent; }
+
+/* Tamaño small */
+.nodo-field--small .nodo-field__box { height: 48px; padding-inline: var(--spacing3); }
+.nodo-field--small .nodo-field__input { font-size: 14px; line-height: 20px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nodo-field__box { transition: none; }
+}                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="component " data-comp="dropdown">
+                <div class="comp-header">
+                    <h2>Dropdown / Select</h2>
+                    <div class="meta">
+                        <span class="badge">INPUT</span>
+                        <span class="badge">v1.0.0</span>
+                        <span class="badge">STABLE</span>
+                    </div>
+                    <p>Compact component for selecting one option from a list of many.</p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'dropdown-overview')">Overview</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'dropdown-anatomy')">Anatomy</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'dropdown-variants')">Variants</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'dropdown-specs')">Specs</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'dropdown-behavior')">Behavior</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'dropdown-access')">Accessibility</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'dropdown-code')">Code</button>
+                </div>
+
+                <!-- OVERVIEW TAB -->
+                <div class="tab-content active" id="dropdown-overview">
+                    <section>
+                        <h3>When to Use</h3>
+                        <ul>
+                            <li>User needs to select 1 option from 5+ choices.</li>
+                            <li>Space is limited and a list wouldn't fit.</li>
+                            <li>Options are mutually exclusive.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>When NOT to Use</h3>
+                        <div class='card'><strong>Only 2-3 options available.</strong><br/>→ Use: radio-button or segmented-button</div>
+                        <div class='card'><strong>Users need to filter or search a large list.</strong><br/>→ Use: autocomplete</div>
+                    </section>
+                </div>
+
+                <!-- ANATOMY TAB -->
+                <div class="tab-content" id="dropdown-anatomy">
+                    <section>
+                        <h3>Component Parts</h3>
+                        <table>
+                            <tr><th>#</th><th>Name</th><th>Required</th><th>Role</th><th>Cardinality</th></tr>
+                            <tr><td>1</td><td><strong>Field</strong></td><td>✓</td><td></td><td>1</td></tr>
+                            <tr><td>2</td><td><strong>Label</strong></td><td>○</td><td></td><td>1</td></tr>
+                            <tr><td>3</td><td><strong>Selected Value</strong></td><td>✓</td><td></td><td>1</td></tr>
+                            <tr><td>4</td><td><strong>Dropdown Icon</strong></td><td>✓</td><td></td><td>1</td></tr>
+                            <tr><td>5</td><td><strong>Menu (Listbox)</strong></td><td>○</td><td></td><td>0..1</td></tr>
+                            <tr><td>6</td><td><strong>Menu Item</strong></td><td>○</td><td></td><td>1..n</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- VARIANTS TAB -->
+                <div class="tab-content" id="dropdown-variants">
+                    <section>
+                        <h3>Variant Axes</h3>
+                        <h4>Type</h4>
+                        <p><strong>Values:</strong> filled, outlined</p>
+                        <p><strong>Default:</strong> filled</p>
+                        <h4>Size</h4>
+                        <p><strong>Values:</strong> small, medium</p>
+                        <p><strong>Default:</strong> medium</p>
+                        <h4>State</h4>
+                        <p><strong>Values:</strong> default, hover, focused, open, disabled</p>
+                        <p><strong>Default:</strong> default</p>
+                        <p><strong>Total Combinations:</strong> 20</p>
+                    </section>
+                </div>
+
+                <!-- SPECS TAB -->
+                <div class="tab-content" id="dropdown-specs">
+                    <section>
+                        <h3>Base Specifications (Tokens)</h3>
+                        <div class="code-block">
+field:
+  background: --surface-container
+  radius: --radius-md
+  paddingBlock: --spacing3
+  paddingInline: --spacing3
+  minHeight: 44px
+label:
+  typography: label/small
+  foreground: --on-surface-low
+value:
+  typography: body/large
+  foreground: --on-surface
+icon:
+  iconSize: 20px
+  foreground: --on-surface-variant
+                        </div>
+                    </section>
+                </div>
+
+                <!-- BEHAVIOR TAB -->
+                <div class="tab-content" id="dropdown-behavior">
+                    <section>
+                        <h3>States</h3>
+                        <table>
+                            <tr><th>State</th><th>Trigger</th></tr>
+                            <tr><td><strong>default</strong></td><td>Initial state.</td></tr>
+                            <tr><td><strong>hover</strong></td><td>Pointer over field.</td></tr>
+                            <tr><td><strong>focused</strong></td><td>Field receives focus (keyboard or click).</td></tr>
+                            <tr><td><strong>open</strong></td><td>User activates field; menu appears.</td></tr>
+                            <tr><td><strong>disabled</strong></td><td>Field is not interactive.</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- ACCESSIBILITY TAB -->
+                <div class="tab-content" id="dropdown-access">
+                    <section>
+                        <h3>ARIA Role</h3>
+                        <p><code>role="combobox"</code></p>
+                    </section>
+                    <section>
+                        <h3>ARIA Attributes</h3>
+                        <ul>
+                            <li><code>aria-label: Name of dropdown.</code></li>
+                            <li><code>aria-expanded: true when menu open.</code></li>
+                            <li><code>aria-haspopup: listbox</code></li>
+                            <li><code>aria-required: true if selection mandatory.</code></li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Keyboard Support</h3>
+                        <table>
+                            <tr><th>Key</th><th>Action</th></tr>
+                            <tr><td>Tab</td><td>Focus field.</td></tr>
+                            <tr><td>Enter / Space</td><td>Open menu.</td></tr>
+                            <tr><td>Arrow Down/Up</td><td>Navigate menu options.</td></tr>
+                            <tr><td>Enter</td><td>Select highlighted option.</td></tr>
+                            <tr><td>Escape</td><td>Close menu without selecting.</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- CODE TAB -->
+                <div class="tab-content" id="dropdown-code">
+                    <section>
+                        <h3>HTML</h3>
+                        <div class="code-block">
+&lt;div class="nodo-dropdown"&gt;
+  &lt;label class="nodo-dropdown__label"&gt;Choose option&lt;/label&gt;
+  &lt;button class="nodo-dropdown__field" aria-label="Choose option" aria-expanded="false" aria-haspopup="listbox"&gt;
+    &lt;span class="nodo-dropdown__value"&gt;Option 1&lt;/span&gt;
+    &lt;svg class="nodo-dropdown__icon" viewBox="0 0 24 24"&gt;&lt;path d="M7 10l5 5 5-5z"/&gt;&lt;/svg&gt;
+  &lt;/button&gt;
+  &lt;ul class="nodo-dropdown__menu" role="listbox" style="display: none;"&gt;
+    &lt;li role="option" class="nodo-dropdown__item"&gt;Option 1&lt;/li&gt;
+    &lt;li role="option" class="nodo-dropdown__item"&gt;Option 2&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;                        </div>
+                    </section>
+                    <section>
+                        <h3>CSS</h3>
+                        <div class="code-block">
+.nodo-dropdown__field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--spacing3);
+  background: var(--surface-container);
+  border: none;
+  border-radius: var(--radius-md);
+  min-height: 44px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.nodo-dropdown__field:hover { background: var(--surface-container-high); }
+.nodo-dropdown__field:focus-visible {
+  outline: 2px solid var(--nodo-primary-light);
+  outline-offset: 2px;
+}
+.nodo-dropdown__menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline-low);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elevation-2);
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  z-index: 10;
+}                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="component " data-comp="checkbox">
+                <div class="comp-header">
+                    <h2>Checkbox</h2>
+                    <div class="meta">
+                        <span class="badge">INPUT</span>
+                        <span class="badge">v1.0.0</span>
+                        <span class="badge">STABLE</span>
+                    </div>
+                    <p>Allows user to select one or more options from a set.</p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'checkbox-overview')">Overview</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'checkbox-anatomy')">Anatomy</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'checkbox-variants')">Variants</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'checkbox-specs')">Specs</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'checkbox-behavior')">Behavior</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'checkbox-access')">Accessibility</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'checkbox-code')">Code</button>
+                </div>
+
+                <!-- OVERVIEW TAB -->
+                <div class="tab-content active" id="checkbox-overview">
+                    <section>
+                        <h3>When to Use</h3>
+                        <ul>
+                            <li>User needs to select multiple items (0 to n).</li>
+                            <li>User needs to toggle a boolean setting on/off.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>When NOT to Use</h3>
+                        <div class='card'><strong>Only 1 option selectable</strong><br/>→ Use: radio-button</div>
+                    </section>
+                </div>
+
+                <!-- ANATOMY TAB -->
+                <div class="tab-content" id="checkbox-anatomy">
+                    <section>
+                        <h3>Component Parts</h3>
+                        <table>
+                            <tr><th>#</th><th>Name</th><th>Required</th><th>Role</th><th>Cardinality</th></tr>
+                            <tr><td>1</td><td><strong>Container</strong></td><td>✓</td><td></td><td>1</td></tr>
+                            <tr><td>2</td><td><strong>Checkbox Box</strong></td><td>✓</td><td></td><td>1</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- VARIANTS TAB -->
+                <div class="tab-content" id="checkbox-variants">
+                    <section>
+                        <h3>Variant Axes</h3>
+                        <p><strong>Total Combinations:</strong> N/A</p>
+                    </section>
+                </div>
+
+                <!-- SPECS TAB -->
+                <div class="tab-content" id="checkbox-specs">
+                    <section>
+                        <h3>Base Specifications (Tokens)</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                </div>
+
+                <!-- BEHAVIOR TAB -->
+                <div class="tab-content" id="checkbox-behavior">
+                    <section>
+                        <h3>States</h3>
+                        <table>
+                            <tr><th>State</th><th>Trigger</th></tr>
+                            <tr><td><strong>unchecked</strong></td><td>Initial state</td></tr>
+                            <tr><td><strong>checked</strong></td><td>User activates</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- ACCESSIBILITY TAB -->
+                <div class="tab-content" id="checkbox-access">
+                    <section>
+                        <h3>ARIA Role</h3>
+                        <p><code>role=""</code></p>
+                    </section>
+                    <section>
+                        <h3>ARIA Attributes</h3>
+                        <ul>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Keyboard Support</h3>
+                        <table>
+                            <tr><th>Key</th><th>Action</th></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- CODE TAB -->
+                <div class="tab-content" id="checkbox-code">
+                    <section>
+                        <h3>HTML</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                    <section>
+                        <h3>CSS</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="component " data-comp="radio-button">
+                <div class="comp-header">
+                    <h2>Radio Button</h2>
+                    <div class="meta">
+                        <span class="badge">INPUT</span>
+                        <span class="badge">v1.0.0</span>
+                        <span class="badge">STABLE</span>
+                    </div>
+                    <p>Select exactly one option from mutually exclusive choices.</p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'radio-button-overview')">Overview</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'radio-button-anatomy')">Anatomy</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'radio-button-variants')">Variants</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'radio-button-specs')">Specs</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'radio-button-behavior')">Behavior</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'radio-button-access')">Accessibility</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'radio-button-code')">Code</button>
+                </div>
+
+                <!-- OVERVIEW TAB -->
+                <div class="tab-content active" id="radio-button-overview">
+                    <section>
+                        <h3>When to Use</h3>
+                        <ul>
+                            <li>Select 1 from 2-5 options</li>
+                            <li>All options must be visible</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>When NOT to Use</h3>
+                        <div class='card'><strong>More than 5 options</strong><br/>→ Use: dropdown</div>
+                        <div class='card'><strong>Multiple selections allowed</strong><br/>→ Use: checkbox</div>
+                    </section>
+                </div>
+
+                <!-- ANATOMY TAB -->
+                <div class="tab-content" id="radio-button-anatomy">
+                    <section>
+                        <h3>Component Parts</h3>
+                        <table>
+                            <tr><th>#</th><th>Name</th><th>Required</th><th>Role</th><th>Cardinality</th></tr>
+                            <tr><td>1</td><td><strong>Radio Circle</strong></td><td>✓</td><td></td><td>1</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- VARIANTS TAB -->
+                <div class="tab-content" id="radio-button-variants">
+                    <section>
+                        <h3>Variant Axes</h3>
+                        <p><strong>Total Combinations:</strong> N/A</p>
+                    </section>
+                </div>
+
+                <!-- SPECS TAB -->
+                <div class="tab-content" id="radio-button-specs">
+                    <section>
+                        <h3>Base Specifications (Tokens)</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                </div>
+
+                <!-- BEHAVIOR TAB -->
+                <div class="tab-content" id="radio-button-behavior">
+                    <section>
+                        <h3>States</h3>
+                        <table>
+                            <tr><th>State</th><th>Trigger</th></tr>
+                            <tr><td><strong>unselected</strong></td><td>Not selected</td></tr>
+                            <tr><td><strong>selected</strong></td><td>User selects</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- ACCESSIBILITY TAB -->
+                <div class="tab-content" id="radio-button-access">
+                    <section>
+                        <h3>ARIA Role</h3>
+                        <p><code>role=""</code></p>
+                    </section>
+                    <section>
+                        <h3>ARIA Attributes</h3>
+                        <ul>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Keyboard Support</h3>
+                        <table>
+                            <tr><th>Key</th><th>Action</th></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- CODE TAB -->
+                <div class="tab-content" id="radio-button-code">
+                    <section>
+                        <h3>HTML</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                    <section>
+                        <h3>CSS</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="component " data-comp="switch">
+                <div class="comp-header">
+                    <h2>Switch</h2>
+                    <div class="meta">
+                        <span class="badge">INPUT</span>
+                        <span class="badge">v1.0.0</span>
+                        <span class="badge">STABLE</span>
+                    </div>
+                    <p>Toggle switch for binary on/off states.</p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'switch-overview')">Overview</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'switch-anatomy')">Anatomy</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'switch-variants')">Variants</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'switch-specs')">Specs</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'switch-behavior')">Behavior</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'switch-access')">Accessibility</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'switch-code')">Code</button>
+                </div>
+
+                <!-- OVERVIEW TAB -->
+                <div class="tab-content active" id="switch-overview">
+                    <section>
+                        <h3>When to Use</h3>
+                        <ul>
+                            <li>Enable/disable features</li>
+                            <li>Binary choice with immediate effect</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>When NOT to Use</h3>
+                        <div class='card'><strong>Multiple options</strong><br/>→ Use: radio-button</div>
+                    </section>
+                </div>
+
+                <!-- ANATOMY TAB -->
+                <div class="tab-content" id="switch-anatomy">
+                    <section>
+                        <h3>Component Parts</h3>
+                        <table>
+                            <tr><th>#</th><th>Name</th><th>Required</th><th>Role</th><th>Cardinality</th></tr>
+                            <tr><td>1</td><td><strong>Track</strong></td><td>✓</td><td></td><td>1</td></tr>
+                            <tr><td>2</td><td><strong>Thumb</strong></td><td>✓</td><td></td><td>1</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- VARIANTS TAB -->
+                <div class="tab-content" id="switch-variants">
+                    <section>
+                        <h3>Variant Axes</h3>
+                        <p><strong>Total Combinations:</strong> N/A</p>
+                    </section>
+                </div>
+
+                <!-- SPECS TAB -->
+                <div class="tab-content" id="switch-specs">
+                    <section>
+                        <h3>Base Specifications (Tokens)</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                </div>
+
+                <!-- BEHAVIOR TAB -->
+                <div class="tab-content" id="switch-behavior">
+                    <section>
+                        <h3>States</h3>
+                        <table>
+                            <tr><th>State</th><th>Trigger</th></tr>
+                            <tr><td><strong>off</strong></td><td>Toggle off</td></tr>
+                            <tr><td><strong>on</strong></td><td>Toggle on</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- ACCESSIBILITY TAB -->
+                <div class="tab-content" id="switch-access">
+                    <section>
+                        <h3>ARIA Role</h3>
+                        <p><code>role=""</code></p>
+                    </section>
+                    <section>
+                        <h3>ARIA Attributes</h3>
+                        <ul>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Keyboard Support</h3>
+                        <table>
+                            <tr><th>Key</th><th>Action</th></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- CODE TAB -->
+                <div class="tab-content" id="switch-code">
+                    <section>
+                        <h3>HTML</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                    <section>
+                        <h3>CSS</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="component " data-comp="badge">
+                <div class="comp-header">
+                    <h2>Badge</h2>
+                    <div class="meta">
+                        <span class="badge">FEEDBACK</span>
+                        <span class="badge">v1.0.0</span>
+                        <span class="badge">STABLE</span>
+                    </div>
+                    <p>Small visual indicator for notification counts or status labels.</p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'badge-overview')">Overview</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'badge-anatomy')">Anatomy</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'badge-variants')">Variants</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'badge-specs')">Specs</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'badge-behavior')">Behavior</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'badge-access')">Accessibility</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'badge-code')">Code</button>
+                </div>
+
+                <!-- OVERVIEW TAB -->
+                <div class="tab-content active" id="badge-overview">
+                    <section>
+                        <h3>When to Use</h3>
+                        <ul>
+                            <li>Display unread count</li>
+                            <li>Show status labels</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>When NOT to Use</h3>
+                        <div class='card'><strong>Extended text needed</strong><br/>→ Use: tooltip</div>
+                    </section>
+                </div>
+
+                <!-- ANATOMY TAB -->
+                <div class="tab-content" id="badge-anatomy">
+                    <section>
+                        <h3>Component Parts</h3>
+                        <table>
+                            <tr><th>#</th><th>Name</th><th>Required</th><th>Role</th><th>Cardinality</th></tr>
+                            <tr><td>1</td><td><strong>Container</strong></td><td>✓</td><td></td><td>1</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- VARIANTS TAB -->
+                <div class="tab-content" id="badge-variants">
+                    <section>
+                        <h3>Variant Axes</h3>
+                        <p><strong>Total Combinations:</strong> N/A</p>
+                    </section>
+                </div>
+
+                <!-- SPECS TAB -->
+                <div class="tab-content" id="badge-specs">
+                    <section>
+                        <h3>Base Specifications (Tokens)</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                </div>
+
+                <!-- BEHAVIOR TAB -->
+                <div class="tab-content" id="badge-behavior">
+                    <section>
+                        <h3>States</h3>
+                        <table>
+                            <tr><th>State</th><th>Trigger</th></tr>
+                            <tr><td><strong>default</strong></td><td>Normal display</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- ACCESSIBILITY TAB -->
+                <div class="tab-content" id="badge-access">
+                    <section>
+                        <h3>ARIA Role</h3>
+                        <p><code>role=""</code></p>
+                    </section>
+                    <section>
+                        <h3>ARIA Attributes</h3>
+                        <ul>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Keyboard Support</h3>
+                        <table>
+                            <tr><th>Key</th><th>Action</th></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- CODE TAB -->
+                <div class="tab-content" id="badge-code">
+                    <section>
+                        <h3>HTML</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                    <section>
+                        <h3>CSS</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="component " data-comp="modal">
+                <div class="comp-header">
+                    <h2>Modal / Dialog</h2>
+                    <div class="meta">
+                        <span class="badge">OVERLAY</span>
+                        <span class="badge">v1.0.0</span>
+                        <span class="badge">STABLE</span>
+                    </div>
+                    <p>Full-screen overlay that demands user attention.</p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'modal-overview')">Overview</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'modal-anatomy')">Anatomy</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'modal-variants')">Variants</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'modal-specs')">Specs</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'modal-behavior')">Behavior</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'modal-access')">Accessibility</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'modal-code')">Code</button>
+                </div>
+
+                <!-- OVERVIEW TAB -->
+                <div class="tab-content active" id="modal-overview">
+                    <section>
+                        <h3>When to Use</h3>
+                        <ul>
+                            <li>Require user decision</li>
+                            <li>Present important information</li>
+                            <li>Confirm critical actions</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>When NOT to Use</h3>
+                        <div class='card'><strong>Non-blocking notification</strong><br/>→ Use: snackbar</div>
+                    </section>
+                </div>
+
+                <!-- ANATOMY TAB -->
+                <div class="tab-content" id="modal-anatomy">
+                    <section>
+                        <h3>Component Parts</h3>
+                        <table>
+                            <tr><th>#</th><th>Name</th><th>Required</th><th>Role</th><th>Cardinality</th></tr>
+                            <tr><td>1</td><td><strong>Scrim</strong></td><td>✓</td><td></td><td>1</td></tr>
+                            <tr><td>2</td><td><strong>Container</strong></td><td>✓</td><td></td><td>1</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- VARIANTS TAB -->
+                <div class="tab-content" id="modal-variants">
+                    <section>
+                        <h3>Variant Axes</h3>
+                        <p><strong>Total Combinations:</strong> N/A</p>
+                    </section>
+                </div>
+
+                <!-- SPECS TAB -->
+                <div class="tab-content" id="modal-specs">
+                    <section>
+                        <h3>Base Specifications (Tokens)</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                </div>
+
+                <!-- BEHAVIOR TAB -->
+                <div class="tab-content" id="modal-behavior">
+                    <section>
+                        <h3>States</h3>
+                        <table>
+                            <tr><th>State</th><th>Trigger</th></tr>
+                            <tr><td><strong>visible</strong></td><td>Modal open</td></tr>
+                            <tr><td><strong>hidden</strong></td><td>Modal closed</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- ACCESSIBILITY TAB -->
+                <div class="tab-content" id="modal-access">
+                    <section>
+                        <h3>ARIA Role</h3>
+                        <p><code>role=""</code></p>
+                    </section>
+                    <section>
+                        <h3>ARIA Attributes</h3>
+                        <ul>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Keyboard Support</h3>
+                        <table>
+                            <tr><th>Key</th><th>Action</th></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- CODE TAB -->
+                <div class="tab-content" id="modal-code">
+                    <section>
+                        <h3>HTML</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                    <section>
+                        <h3>CSS</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="component " data-comp="navigation-bar">
+                <div class="comp-header">
+                    <h2>Navigation Bar</h2>
+                    <div class="meta">
+                        <span class="badge">NAVIGATION</span>
+                        <span class="badge">v1.0.0</span>
+                        <span class="badge">STABLE</span>
+                    </div>
+                    <p>Fixed footer navigation for switching between primary app sections.</p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'navigation-bar-overview')">Overview</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'navigation-bar-anatomy')">Anatomy</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'navigation-bar-variants')">Variants</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'navigation-bar-specs')">Specs</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'navigation-bar-behavior')">Behavior</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'navigation-bar-access')">Accessibility</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'navigation-bar-code')">Code</button>
+                </div>
+
+                <!-- OVERVIEW TAB -->
+                <div class="tab-content active" id="navigation-bar-overview">
+                    <section>
+                        <h3>When to Use</h3>
+                        <ul>
+                            <li>Mobile apps with 3-5 sections</li>
+                            <li>Quick access to main destinations</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>When NOT to Use</h3>
+                        <div class='card'><strong>More than 5 sections</strong><br/>→ Use: navigation-drawer</div>
+                        <div class='card'><strong>Desktop app with top nav</strong><br/>→ Use: app-bar</div>
+                    </section>
+                </div>
+
+                <!-- ANATOMY TAB -->
+                <div class="tab-content" id="navigation-bar-anatomy">
+                    <section>
+                        <h3>Component Parts</h3>
+                        <table>
+                            <tr><th>#</th><th>Name</th><th>Required</th><th>Role</th><th>Cardinality</th></tr>
+                            <tr><td>1</td><td><strong>Container</strong></td><td>✓</td><td></td><td>1</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- VARIANTS TAB -->
+                <div class="tab-content" id="navigation-bar-variants">
+                    <section>
+                        <h3>Variant Axes</h3>
+                        <p><strong>Total Combinations:</strong> N/A</p>
+                    </section>
+                </div>
+
+                <!-- SPECS TAB -->
+                <div class="tab-content" id="navigation-bar-specs">
+                    <section>
+                        <h3>Base Specifications (Tokens)</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                </div>
+
+                <!-- BEHAVIOR TAB -->
+                <div class="tab-content" id="navigation-bar-behavior">
+                    <section>
+                        <h3>States</h3>
+                        <table>
+                            <tr><th>State</th><th>Trigger</th></tr>
+                            <tr><td><strong>default</strong></td><td>Initial state</td></tr>
+                            <tr><td><strong>active</strong></td><td>Item selected</td></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- ACCESSIBILITY TAB -->
+                <div class="tab-content" id="navigation-bar-access">
+                    <section>
+                        <h3>ARIA Role</h3>
+                        <p><code>role=""</code></p>
+                    </section>
+                    <section>
+                        <h3>ARIA Attributes</h3>
+                        <ul>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Keyboard Support</h3>
+                        <table>
+                            <tr><th>Key</th><th>Action</th></tr>
+                        </table>
+                    </section>
+                </div>
+
+                <!-- CODE TAB -->
+                <div class="tab-content" id="navigation-bar-code">
+                    <section>
+                        <h3>HTML</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                    <section>
+                        <h3>CSS</h3>
+                        <div class="code-block">
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.querySelectorAll('.comp-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const compId = btn.dataset.comp;
+                document.querySelectorAll('.comp-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.component').forEach(c => c.classList.remove('active'));
+                document.querySelector(`[data-comp="${compId}"]`).classList.add('active');
+                
+                document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                document.querySelector(`[data-comp="${compId}"] .tab-btn`).classList.add('active');
+                document.querySelector(`[data-comp="${compId}"] .tab-content`).classList.add('active');
+            });
+        });
+
+        function switchTab(event, tabId) {
+            event.preventDefault();
+            const component = event.target.closest('.component');
+            component.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            component.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
