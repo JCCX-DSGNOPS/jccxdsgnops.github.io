@@ -1,0 +1,72 @@
+{
+  "$schema": "../schema/component.schema.json",
+  "identity": {
+    "id": "modal",
+    "name": "Modal / Dialog",
+    "category": "overlay",
+    "status": "stable",
+    "version": "1.0.0"
+  },
+  "purpose": {
+    "summary": "Full-screen overlay that demands user attention.",
+    "whenToUse": [
+      "Require user decision",
+      "Present important information",
+      "Confirm critical actions"
+    ],
+    "whenNotToUse": [
+      {
+        "case": "Non-blocking notification",
+        "useInstead": "snackbar"
+      }
+    ]
+  },
+  "anatomy": {
+    "parts": [
+      {
+        "index": 1,
+        "id": "scrim",
+        "name": "Scrim",
+        "required": true,
+        "style": {
+          "background": "rgba(0,0,0,0.32)",
+          "position": "fixed",
+          "inset": "0"
+        }
+      },
+      {
+        "index": 2,
+        "id": "container",
+        "name": "Container",
+        "required": true,
+        "style": {
+          "background": "--surface-container-low",
+          "borderRadius": "--radius-lg"
+        }
+      }
+    ]
+  },
+  "states": {
+    "interactionModel": "static",
+    "list": [
+      {
+        "id": "visible",
+        "trigger": "Modal open",
+        "delta": {
+          "scrim": {
+            "opacity": 1
+          }
+        }
+      },
+      {
+        "id": "hidden",
+        "trigger": "Modal closed",
+        "delta": {
+          "scrim": {
+            "opacity": 0
+          }
+        }
+      }
+    ]
+  }
+}

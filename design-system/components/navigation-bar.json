@@ -1,0 +1,61 @@
+{
+  "$schema": "../schema/component.schema.json",
+  "identity": {
+    "id": "navigation-bar",
+    "name": "Navigation Bar",
+    "category": "navigation",
+    "status": "stable",
+    "version": "1.0.0"
+  },
+  "purpose": {
+    "summary": "Fixed footer navigation for switching between primary app sections.",
+    "whenToUse": [
+      "Mobile apps with 3-5 sections",
+      "Quick access to main destinations"
+    ],
+    "whenNotToUse": [
+      {
+        "case": "More than 5 sections",
+        "useInstead": "navigation-drawer"
+      },
+      {
+        "case": "Desktop app with top nav",
+        "useInstead": "app-bar"
+      }
+    ]
+  },
+  "anatomy": {
+    "parts": [
+      {
+        "index": 1,
+        "id": "container",
+        "name": "Container",
+        "required": true,
+        "style": {
+          "position": "fixed",
+          "bottom": "0",
+          "height": "80px"
+        }
+      }
+    ]
+  },
+  "states": {
+    "interactionModel": "activatable",
+    "list": [
+      {
+        "id": "default",
+        "trigger": "Initial state",
+        "delta": {}
+      },
+      {
+        "id": "active",
+        "trigger": "Item selected",
+        "delta": {
+          "item-icon": {
+            "color": "--nodo-primary"
+          }
+        }
+      }
+    ]
+  }
+}

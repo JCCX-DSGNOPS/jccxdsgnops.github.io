@@ -1,0 +1,48 @@
+{
+  "$schema": "../schema/component.schema.json",
+  "identity": {
+    "id": "badge",
+    "name": "Badge",
+    "category": "feedback",
+    "status": "stable",
+    "version": "1.0.0"
+  },
+  "purpose": {
+    "summary": "Small visual indicator for notification counts or status labels.",
+    "whenToUse": [
+      "Display unread count",
+      "Show status labels"
+    ],
+    "whenNotToUse": [
+      {
+        "case": "Extended text needed",
+        "useInstead": "tooltip"
+      }
+    ]
+  },
+  "anatomy": {
+    "parts": [
+      {
+        "index": 1,
+        "id": "container",
+        "name": "Container",
+        "required": true,
+        "style": {
+          "background": "--error",
+          "borderRadius": "50%",
+          "width": "20px"
+        }
+      }
+    ]
+  },
+  "states": {
+    "interactionModel": "static",
+    "list": [
+      {
+        "id": "default",
+        "trigger": "Normal display",
+        "delta": {}
+      }
+    ]
+  }
+}

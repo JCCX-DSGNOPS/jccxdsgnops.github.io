@@ -1,0 +1,222 @@
+{
+  "$schema": "../schema/component.schema.json",
+  "identity": {
+    "id": "dropdown",
+    "name": "Dropdown / Select",
+    "category": "input",
+    "status": "stable",
+    "version": "1.0.0",
+    "m3Equivalent": "Dropdown (filled | outlined)"
+  },
+  "purpose": {
+    "summary": "Compact component for selecting one option from a list of many.",
+    "whenToUse": [
+      "User needs to select 1 option from 5+ choices.",
+      "Space is limited and a list wouldn't fit.",
+      "Options are mutually exclusive."
+    ],
+    "whenNotToUse": [
+      { "case": "Only 2-3 options available.", "useInstead": "radio-button or segmented-button" },
+      { "case": "Users need to filter or search a large list.", "useInstead": "autocomplete" }
+    ]
+  },
+  "anatomy": {
+    "parts": [
+      {
+        "index": 1,
+        "id": "field",
+        "name": "Field",
+        "required": true,
+        "description": "Container that holds selected value and trigger.",
+        "style": { "background": "--surface-container", "radius": "--radius-md", "paddingBlock": "--spacing3", "paddingInline": "--spacing3" }
+      },
+      {
+        "index": 2,
+        "id": "label",
+        "name": "Label",
+        "required": false,
+        "description": "Text above field describing what is selected.",
+        "style": { "typography": "label/small", "foreground": "--on-surface-low" }
+      },
+      {
+        "index": 3,
+        "id": "value",
+        "name": "Selected Value",
+        "required": true,
+        "description": "Text showing current selection.",
+        "style": { "typography": "body/large", "foreground": "--on-surface" }
+      },
+      {
+        "index": 4,
+        "id": "icon",
+        "name": "Dropdown Icon",
+        "required": true,
+        "description": "Trailing chevron or arrow icon.",
+        "style": { "foreground": "--on-surface-variant", "iconSize": "20px" }
+      },
+      {
+        "index": 5,
+        "id": "menu",
+        "name": "Menu (Listbox)",
+        "required": false,
+        "cardinality": "0..1",
+        "description": "Popup list of options. Appears below field when activated.",
+        "style": { "background": "--surface-container-low", "elevation": "--elevation-2" }
+      },
+      {
+        "index": 6,
+        "id": "menuitem",
+        "name": "Menu Item",
+        "required": false,
+        "cardinality": "1..n",
+        "description": "Individual selectable option in menu.",
+        "style": { "paddingBlock": "--spacing3", "paddingInline": "--spacing4" }
+      }
+    ]
+  },
+  "variants": {
+    "axes": [
+      { "id": "type", "label": "Type", "values": ["filled", "outlined"], "default": "filled" },
+      { "id": "size", "label": "Size", "values": ["small", "medium"], "default": "medium" },
+      { "id": "state", "label": "State", "values": ["default", "hover", "focused", "open", "disabled"], "default": "default" }
+    ],
+    "named": [
+      {
+        "id": "filled",
+        "name": "Filled",
+        "description": "Default style with filled background.",
+        "overrides": { "field": { "background": "--surface-container" } }
+      },
+      {
+        "id": "outlined",
+        "name": "Outlined",
+        "description": "Outlined style with border.",
+        "overrides": { "field": { "background": "transparent", "border": "--outline", "borderWidth": "1px" } }
+      }
+    ],
+    "variantCount": 20
+  },
+  "specs": {
+    "base": {
+      "field": {
+        "background": "--surface-container",
+        "radius": "--radius-md",
+        "paddingBlock": "--spacing3",
+        "paddingInline": "--spacing3",
+        "minHeight": "44px"
+      },
+      "label": { "typography": "label/small", "foreground": "--on-surface-low" },
+      "value": { "typography": "body/large", "foreground": "--on-surface" },
+      "icon": { "iconSize": "20px", "foreground": "--on-surface-variant" }
+    }
+  },
+  "states": {
+    "interactionModel": "editable",
+    "list": [
+      { "id": "default", "trigger": "Initial state.", "delta": {} },
+      {
+        "id": "hover",
+        "trigger": "Pointer over field.",
+        "delta": { "field": { "background": "--surface-container-high" } }
+      },
+      {
+        "id": "focused",
+        "trigger": "Field receives focus (keyboard or click).",
+        "delta": { "field": { "outline": "--nodo-primary-light", "outlineWidth": "2px", "outlineOffset": "2px" } }
+      },
+      {
+        "id": "open",
+        "trigger": "User activates field; menu appears.",
+        "delta": { "menu": { "opacity": 1, "visibility": "visible" } }
+      },
+      {
+        "id": "disabled",
+        "trigger": "Field is not interactive.",
+        "delta": { "field": { "opacity": 0.12 }, "value": { "opacity": 0.38 } }
+      }
+    ]
+  },
+  "behavior": {
+    "interactions": [
+      {
+        "id": "open",
+        "trigger": "click / Enter on field",
+        "result": "Menu opens below field, shows all options.",
+        "motion": { "duration": "200ms" }
+      },
+      {
+        "id": "select",
+        "trigger": "click / Enter on menu item",
+        "result": "Menu closes, field updates to show selection.",
+        "motion": { "duration": "150ms" }
+      }
+    ],
+    "overflow": "Menu items truncate with ellipsis if text overflows."
+  },
+  "composition": {
+    "slots": [
+      {
+        "id": "value",
+        "name": "Selected Value",
+        "accepts": ["text"],
+        "cardinality": "1",
+        "required": true
+      },
+      {
+        "id": "options",
+        "name": "Menu Options",
+        "accepts": ["component"],
+        "allowedComponents": ["text"],
+        "cardinality": "1..n",
+        "required": true
+      }
+    ],
+    "props": [
+      { "name": "options", "type": "array", "required": true },
+      { "name": "value", "type": "string", "required": true },
+      { "name": "disabled", "type": "boolean", "default": false },
+      { "name": "required", "type": "boolean", "default": false }
+    ]
+  },
+  "guidelines": {
+    "do": [
+      "Provide a clear label above dropdown.",
+      "Sort options alphabetically or by frequency.",
+      "Show first option as default if none selected.",
+      "Keep option labels concise."
+    ],
+    "dont": [
+      "Don't use dropdown for 2-3 options.",
+      "Don't use dropdown for boolean choice (use switch instead).",
+      "Don't truncate option text without indication."
+    ]
+  },
+  "accessibility": {
+    "role": "combobox",
+    "ariaAttributes": [
+      "aria-label: Name of dropdown.",
+      "aria-expanded: true when menu open.",
+      "aria-haspopup: listbox",
+      "aria-required: true if selection mandatory."
+    ],
+    "keyboard": [
+      { "key": "Tab", "action": "Focus field." },
+      { "key": "Enter / Space", "action": "Open menu." },
+      { "key": "Arrow Down/Up", "action": "Navigate menu options." },
+      { "key": "Enter", "action": "Select highlighted option." },
+      { "key": "Escape", "action": "Close menu without selecting." }
+    ],
+    "contrast": [
+      {
+        "pair": "--on-surface on --surface-container",
+        "ratio": 10.5,
+        "requirement": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "code": {
+    "html": "<div class=\"nodo-dropdown\">\n  <label class=\"nodo-dropdown__label\">Choose option</label>\n  <button class=\"nodo-dropdown__field\" aria-label=\"Choose option\" aria-expanded=\"false\" aria-haspopup=\"listbox\">\n    <span class=\"nodo-dropdown__value\">Option 1</span>\n    <svg class=\"nodo-dropdown__icon\" viewBox=\"0 0 24 24\"><path d=\"M7 10l5 5 5-5z\"/></svg>\n  </button>\n  <ul class=\"nodo-dropdown__menu\" role=\"listbox\" style=\"display: none;\">\n    <li role=\"option\" class=\"nodo-dropdown__item\">Option 1</li>\n    <li role=\"option\" class=\"nodo-dropdown__item\">Option 2</li>\n  </ul>\n</div>",
+    "css": ".nodo-dropdown__field {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n  padding: var(--spacing3);\n  background: var(--surface-container);\n  border: none;\n  border-radius: var(--radius-md);\n  min-height: 44px;\n  cursor: pointer;\n  transition: background var(--transition-fast);\n}\n.nodo-dropdown__field:hover { background: var(--surface-container-high); }\n.nodo-dropdown__field:focus-visible {\n  outline: 2px solid var(--nodo-primary-light);\n  outline-offset: 2px;\n}\n.nodo-dropdown__menu {\n  position: absolute;\n  top: 100%;\n  left: 0;\n  right: 0;\n  background: var(--surface-container-low);\n  border: 1px solid var(--outline-low);\n  border-radius: var(--radius-md);\n  box-shadow: var(--elevation-2);\n  list-style: none;\n  margin: 8px 0 0;\n  padding: 0;\n  z-index: 10;\n}"
+  }
+}

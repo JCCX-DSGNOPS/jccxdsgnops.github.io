@@ -1,0 +1,68 @@
+{
+  "$schema": "../schema/component.schema.json",
+  "identity": {
+    "id": "switch",
+    "name": "Switch",
+    "category": "input",
+    "status": "stable",
+    "version": "1.0.0"
+  },
+  "purpose": {
+    "summary": "Toggle switch for binary on/off states.",
+    "whenToUse": [
+      "Enable/disable features",
+      "Binary choice with immediate effect"
+    ],
+    "whenNotToUse": [
+      {
+        "case": "Multiple options",
+        "useInstead": "radio-button"
+      }
+    ]
+  },
+  "anatomy": {
+    "parts": [
+      {
+        "index": 1,
+        "id": "track",
+        "name": "Track",
+        "required": true,
+        "style": {
+          "width": "52px",
+          "height": "32px",
+          "borderRadius": "16px"
+        }
+      },
+      {
+        "index": 2,
+        "id": "thumb",
+        "name": "Thumb",
+        "required": true,
+        "style": {
+          "width": "24px",
+          "height": "24px",
+          "borderRadius": "50%"
+        }
+      }
+    ]
+  },
+  "states": {
+    "interactionModel": "activatable",
+    "list": [
+      {
+        "id": "off",
+        "trigger": "Toggle off",
+        "delta": {}
+      },
+      {
+        "id": "on",
+        "trigger": "Toggle on",
+        "delta": {
+          "track": {
+            "background": "--nodo-primary"
+          }
+        }
+      }
+    ]
+  }
+}

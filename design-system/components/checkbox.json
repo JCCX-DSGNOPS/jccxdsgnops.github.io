@@ -1,0 +1,69 @@
+{
+  "$schema": "../schema/component.schema.json",
+  "identity": {
+    "id": "checkbox",
+    "name": "Checkbox",
+    "category": "input",
+    "status": "stable",
+    "version": "1.0.0"
+  },
+  "purpose": {
+    "summary": "Allows user to select one or more options from a set.",
+    "whenToUse": [
+      "User needs to select multiple items (0 to n).",
+      "User needs to toggle a boolean setting on/off."
+    ],
+    "whenNotToUse": [
+      {
+        "case": "Only 1 option selectable",
+        "useInstead": "radio-button"
+      }
+    ]
+  },
+  "anatomy": {
+    "parts": [
+      {
+        "index": 1,
+        "id": "container",
+        "name": "Container",
+        "required": true,
+        "style": {
+          "display": "flex",
+          "gap": "--spacing2",
+          "alignItems": "center"
+        }
+      },
+      {
+        "index": 2,
+        "id": "box",
+        "name": "Checkbox Box",
+        "required": true,
+        "style": {
+          "width": "20px",
+          "height": "20px",
+          "border": "--outline",
+          "borderRadius": "--radius-xs"
+        }
+      }
+    ]
+  },
+  "states": {
+    "interactionModel": "selectable",
+    "list": [
+      {
+        "id": "unchecked",
+        "trigger": "Initial state",
+        "delta": {}
+      },
+      {
+        "id": "checked",
+        "trigger": "User activates",
+        "delta": {
+          "box": {
+            "background": "--nodo-primary"
+          }
+        }
+      }
+    ]
+  }
+}
